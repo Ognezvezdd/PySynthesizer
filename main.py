@@ -14,13 +14,6 @@ NOTES = ["C1", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H", "C2"]
 GENERATION_TYPE = "sinus"
 GENERATION_TYPES = ["sinus", "saw", "guitar"]
 EFFECTS = {"distortion": 1}
-
-
-print(OCT_NUMBER)
-f = generate_notes(2)
-print(OCT_NUMBER)
-
-
 def change_gen():
     pass
 def set_dist():

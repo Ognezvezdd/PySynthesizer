@@ -1,4 +1,6 @@
 import dearpygui.dearpygui as dpg
+from Melodys.Samples import Generator
+
 # длительность звука
 DURATION_TONE = 1 / 64.0
 # частота дискретизации
@@ -14,12 +16,21 @@ NOTES = ["C1", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H", "C2"]
 GENERATION_TYPE = "sinus"
 GENERATION_TYPES = ["sinus", "saw", "guitar"]
 EFFECTS = {"distortion": 1}
+
+g = Generator(S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS, OCT_NUMBER)
+
+
 def change_gen():
     pass
+
+
 def set_dist():
     pass
+
+
 def play_note(note):
-    print(NOTES[note-27])
+    print(NOTES[note - 27])
+
 
 def oct_plus():
     global OCT_NUMBER

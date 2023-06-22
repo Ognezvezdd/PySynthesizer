@@ -21,7 +21,6 @@ USED_GRAPHS = False
 
 g = Generator(S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS, OCT_NUMBER, USED_GRAPHS)
 
-
 def change_gen():
     pass
 

@@ -6,8 +6,7 @@ import guitar
 
 class Generator:
 
-    def __init__(self, S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS, OCT_NUMBER,
-                 USED_GRAPHS=True):
+    def __init__(self, S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS, OCT_NUMBER, USED_GRAPHS):
         self.OCT_NUMBER = OCT_NUMBER
         self.S_16BIT = S_16BIT
         self.SAMPLE_RATE = SAMPLE_RATE

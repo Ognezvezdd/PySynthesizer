@@ -21,7 +21,7 @@ def change_gen():
 def set_dist():
     pass
 def play_note(note):
-    print(note)
+    print(NOTES[note-27])
 
 dpg.create_context()
 
@@ -35,7 +35,6 @@ with dpg.window(label="FL", tag="Primary Window"):
 
     buttons = []
     for i in NOTES:
-        print(i)
         buttons.append(dpg.add_button(label=i, callback=play_note))
 
 dpg.create_viewport(title='Custom Title', width=600, height=300)

@@ -19,7 +19,6 @@ EFFECTS = {"distortion": 1}
 
 g = Generator(S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS, OCT_NUMBER)
 
-
 def change_gen():
     pass
 

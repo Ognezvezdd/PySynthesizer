@@ -36,11 +36,11 @@ def play_note(note):
 def oct_plus():
     global OCT_NUMBER
     OCT_NUMBER = (OCT_NUMBER + 1) % len(OCTAVES)
-    oct_label.format(label=f"{OCTAVES[OCT_NUMBER]}")
+    dpg.set_item_label(oct_label, f"{OCTAVES[OCT_NUMBER]}")
 def oct_minus():
     global OCT_NUMBER
     OCT_NUMBER = (OCT_NUMBER - 1) % len(OCTAVES)
-    oct_label.format(label=f"{OCTAVES[OCT_NUMBER]}")
+    dpg.set_item_label(oct_label, f"{OCTAVES[OCT_NUMBER]}")
 
 
 dpg.create_context()

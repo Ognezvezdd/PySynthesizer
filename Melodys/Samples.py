@@ -1,3 +1,7 @@
+import numpy as np
+from main import S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS
+import guitar
+
 
 def generate_sample(freq, duration, volume):
     print("i calc smth")
@@ -17,7 +21,7 @@ def generate_sample(freq, duration, volume):
 
     data['saw'] = np.round(2 * amplitude / np.pi *
                            np.arctan(np.tan(np.pi * k * freq / SAMPLE_RATE)))
-    data['guitar'] = gitar.guitarString(freq, sample_rate=SAMPLE_RATE, toType=False)
+    data['guitar'] = guitar.guitarString(freq, sample_rate=SAMPLE_RATE, toType=False)
     # plt.plot(data['guitar'])
     # plt.show()
     # exit(0)

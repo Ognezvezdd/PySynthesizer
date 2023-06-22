@@ -31,6 +31,16 @@ def play_note(note):
     print(NOTES[note - 27])
 
 
+def oct_plus():
+    global OCT_NUMBER
+    OCT_NUMBER = (OCT_NUMBER + 1) % len(OCTAVES)
+    dpg.set_item_label(oct_label, f"{OCTAVES[OCT_NUMBER]}")
+def oct_minus():
+    global OCT_NUMBER
+    OCT_NUMBER = (OCT_NUMBER - 1) % len(OCTAVES)
+    dpg.set_item_label(oct_label, f"{OCTAVES[OCT_NUMBER]}")
+
+
 dpg.create_context()
 
 with dpg.window(label="FL", tag="Primary Window"):
@@ -44,6 +54,9 @@ with dpg.window(label="FL", tag="Primary Window"):
     buttons = []
     for i in NOTES:
         buttons.append(dpg.add_button(label=i, callback=play_note))
+
+    dpg.add_button(label="Oct-", callback=oct_plus)
+    dpg.add_button(label="Oct+", callback=oct_minus)
 
 dpg.create_viewport(title='Custom Title', width=600, height=300)
 dpg.setup_dearpygui()

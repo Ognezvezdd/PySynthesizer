@@ -1,3 +1,4 @@
+import asyncio
 from tkinter import *
 
 import pyaudio as pa
@@ -226,8 +227,8 @@ def keydown(event):
             btnC2.config(bg="#888888", relief="sunken")
     except ValueError:
         pass
-    time.sleep(0.01)
-    play_note()
+    asyncio.run(play_note())
+    asyncio.sleep(1)
 
 
 def keyup(event):
@@ -266,7 +267,7 @@ def keyup(event):
         pass
 
 
-def play_note():
+async def play_note():
     global pressed_keys
     key_list = ["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"]
     sound = [0] * len(tones[0])
@@ -371,7 +372,7 @@ tones = generate_tones(duration_tone)
 p = pa.PyAudio()
 # создаём поток для вывода
 stream = p.open(format=p.get_format_from_width(width=2),
-                channels=2, rate=SAMPLE_RATE, output=True)
+                channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=100000)
 
 window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)

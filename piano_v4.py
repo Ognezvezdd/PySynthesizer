@@ -28,7 +28,6 @@ pressed_keys = set()
 
 
 def generate_sample(freq, duration, volume):
-    print("i calc smth")
     # амплитуда
     amplitude = np.round(S_16BIT * volume / 4)
     # длительность генерируемого звука в сэмплах

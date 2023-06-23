@@ -1,12 +1,12 @@
 from tkinter import *
 
 import pyaudio as pa
-import pandas as pd
+# import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-import gitar
+import guitar
 
 # длительность звука
 duration_tone = 1 / 64.0
@@ -45,7 +45,7 @@ def generate_sample(freq, duration, volume):
 
     data['saw'] = np.round(2 * amplitude / np.pi *
                            np.arctan(np.tan(np.pi * k * freq / SAMPLE_RATE)))
-    data['guitar'] = gitar.guitarString(freq, sample_rate=SAMPLE_RATE, toType=False)
+    data['guitar'] = guitar.guitarString(freq, sample_rate=SAMPLE_RATE, toType=False)
     # plt.plot(data['guitar'])
     # plt.show()
     # exit(0)

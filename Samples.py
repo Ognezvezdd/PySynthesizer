@@ -33,7 +33,7 @@ class Generator:
 
         data['saw'] = np.round(2 * amplitude / np.pi *
                                np.arctan(np.tan(np.pi * k * freq / self.SAMPLE_RATE)))
-        data['guitar'] = guitar.guitarString(freq, sample_rate=self.SAMPLE_RATE, toType=False)
+        data['guitar'] = guitar.guitar_string(freq, sample_rate=self.SAMPLE_RATE, toType=False)
 
         dist_parameter = self.EFFECTS['distortion']
         if dist_parameter != 1.0:

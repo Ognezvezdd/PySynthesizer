@@ -4,7 +4,7 @@ import numpy as np
 # import scipy.io.wavfile as wave
 
 
-def guitarString(frequency, duration=1., sample_rate=44100, toType=True):
+def guitar_string(frequency, duration=1., sample_rate=44100, toType=True):
     # Частота сигнала, равная frequency, означает, что сигнал должен колеблеться за одну секунду frequency раз.
     # Сигнал за одну секунду колеблется sample_rate/length раз.
     # Тогда length = sample_rate/frequency.

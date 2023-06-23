@@ -45,7 +45,7 @@ def generate_sample(freq, duration, volume):
 
     data['saw'] = np.round(2 * amplitude / np.pi *
                            np.arctan(np.tan(np.pi * k * freq / SAMPLE_RATE)))
-    data['guitar'] = guitar.guitarString(freq, sample_rate=SAMPLE_RATE, toType=False)
+    data['guitar'] = guitar.guitar_string(freq, sample_rate=SAMPLE_RATE, toType=False)
     # plt.plot(data['guitar'])
     # plt.show()
     # exit(0)

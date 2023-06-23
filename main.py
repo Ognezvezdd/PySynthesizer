@@ -28,10 +28,8 @@ def change_gen():
 
 def set_dist():
     pass
-
-
 def play_note(note):
-    print(NOTES[note - 27])
+    print(NOTES[note - 32])
 
 
 def oct_plus():

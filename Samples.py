@@ -63,7 +63,8 @@ class Generator:
                 continue
             if self.USED_GRAPHS:
                 plt.plot(tone[0:1000])
-                plt.show()
+        if self.USED_GRAPHS:
+            plt.show()
         return tones
 
     def config_duration(self, string):

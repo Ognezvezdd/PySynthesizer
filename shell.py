@@ -41,8 +41,10 @@ def keyup(event):
 def oct_change(side):
     global OCT_NUMBER
     OCT_NUMBER = (OCT_NUMBER + side) % len(OCTAVES)
+    generator.OCT_NUMBER = OCT_NUMBER
     label_octnumber.config(text=f"{(OCTAVES[OCT_NUMBER])}")
-
+    global tones
+    tones = generator.generate_tones(DURATION_TONE)
 
 def gen_change():
     global GENERATION_TYPE

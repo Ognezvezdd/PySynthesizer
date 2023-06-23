@@ -10,7 +10,7 @@ def guitarString(frequency, duration=1., sample_rate=44100, toType=True):
     # Тогда length = sample_rate/frequency.
     noise = np.random.uniform(-1, 1, int(sample_rate / frequency))  # Создаем шум
 
-    samples = np.zeros(int(sample_rate * duration))
+    samples = np.zeros(int(sample_rate * duration * 1.3))
     for i in range(len(noise)):
         samples[i] = noise[i]
     for i in range(len(noise), len(samples)):

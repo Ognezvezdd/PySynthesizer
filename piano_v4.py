@@ -292,11 +292,11 @@ window.geometry("960x540")
 labelOctNumber = Label(window, text="{}".format(OCTAVES[OCT_NUMBER]), font="Times 20", bg="black", fg="white")
 labelOctNumber.place(relx=0.26, rely=0, relwidth=0.48, relheight=0.09)
 
-btnOctPlus = Button(window, text="Oct+", font="Times 16", bg=SECOND_COLOR, fg="black", activebackground=SECOND_COLOR_PRESSED,
+btnOctPlus = Button(window, text="Oct+", font="Times 16", bg="#00FFFF", fg="black", activebackground="#00DDDD",
                     activeforeground="black", command=OctPlus)
 btnOctPlus.place(relx=0.875, rely=0.9, relwidth=0.125, relheight=0.1)
 
-btnOctMinus = Button(window, text="Oct-", font="Times 16", bg=SECOND_COLOR, fg="black", activebackground=SECOND_COLOR_PRESSED,
+btnOctMinus = Button(window, text="Oct-", font="Times 16", bg="#00FFFF", fg="black", activebackground="#00DDDD",
                      activeforeground="black", command=OctMinus)
 btnOctMinus.place(relx=0, rely=0.9, relwidth=0.125, relheight=0.1)
 
@@ -352,8 +352,8 @@ btnHb = Button(window, text="Hb", font="Times 16", bg="black", fg="white", activ
                activeforeground="white", command=Hb)
 btnHb.place(relx=0.71, rely=0.2, relwidth=0.08, relheight=0.34)
 
-btnGC = Button(window, text="{}".format(GENERATION_TYPE), font="Times 16", bg=SECOND_COLOR, fg="black",
-               activebackground=SECOND_COLOR_PRESSED, activeforeground="black", command=generation_change)
+btnGC = Button(window, text="{}".format(GENERATION_TYPE), font="Times 16", bg="#00FFFF", fg="black",
+               activebackground="#00DDDD", activeforeground="black", command=generation_change)
 btnGC.place(relx=0.38, rely=0.1, relwidth=0.24, relheight=0.09)
 
 labelDist = Label(window, text="Distortion:", font="Times 16", bg="black", fg="white")
@@ -362,7 +362,7 @@ labelDist.place(relx=0.75, rely=0, relwidth=0.25, relheight=0.09)
 scaleDist = Scale(window, from_=10, to=100, orient="horizontal")
 scaleDist.place(relx=0.75, rely=0.1, relwidth=0.25, relheight=0.09)
 
-btnDist = Button(window, text="Set", font="Times 16", bg=SECOND_COLOR, fg="black", activebackground=SECOND_COLOR_PRESSED,
+btnDist = Button(window, text="Set", font="Times 16", bg="#00FFFF", fg="black", activebackground="#00DDDD",
                  activeforeground="black", command=distortion_change)
 btnDist.place(relx=0.63, rely=0.1, relwidth=0.11, relheight=0.09)
 

@@ -29,7 +29,7 @@ class Generator:
         # массив значений функции (с округлением)
 
         data = dict.fromkeys(self.GENERATION_TYPES)
-        data['sin'] = np.round(amplitude * np.sin(k * w))
+        data['sinus'] = np.round(amplitude * np.sin(k * w))
 
         data['saw'] = np.round(2 * amplitude / np.pi *
                                np.arctan(np.tan(np.pi * k * freq / self.SAMPLE_RATE)))
@@ -43,12 +43,13 @@ class Generator:
         return data[self.GENERATION_TYPE]
 
     def generate_notes(self, n):
-        self.OCT_NUMBER = 5
         n += self.OCT_NUMBER * 12 + 2
         return 27.5 * float(2 ** float(n / 12))
 
     def generate_tones(self, duration):
         plt.close()
+        if self.USED_GRAPHS:
+            plt.plot()
         tones = []
         i = 0
         print([self.generate_notes(n) for n in range(1, 14, 1)])
@@ -64,3 +65,19 @@ class Generator:
                 plt.plot(tone[0:1000])
                 plt.show()
         return tones
+
+    def config_duration(self, string):
+        if not string.replace('.', '').isdigit():
+            return
+        num = float(string)
+        if 100 > num > 1:
+            num /= 100
+        if num < 0.1:
+            num = 0.
+        if num >= 100:
+            num = 1
+
+        if self.EFFECTS['distortion'] == num:
+            return
+        self.EFFECTS['distortion'] = num
+        print(f"distortion: {self.EFFECTS['distortion']}")

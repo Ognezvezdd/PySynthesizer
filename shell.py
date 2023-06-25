@@ -1,6 +1,7 @@
 from tkinter import *
 import asyncio
 import pyaudio as pa
+import numpy as np
 
 import Samples
 
@@ -17,6 +18,7 @@ GENERATION_TYPE = "sinus"
 GENERATION_TYPES = ["sinus", "saw", 'guitar']
 EFFECTS = {'distortion': 1}
 
+BIND_KEYS = ["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"]
 NOTES = ["C1", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H", "C2"]
 WHITE_NOTES = 8
 
@@ -31,11 +33,28 @@ pressed_keys = set()
 def keydown(event):
     global pressed_keys
     pressed_keys.add(event.keysym)
+    try:
+        index = BIND_KEYS.index(event.keysym)
+        if len(NOTES[index]) >= 2 and NOTES[index][1] == "b":
+            buttons[index].config(bg="#444444", relief="sunken")
+        else:
+            buttons[index].config(bg="#DDDDDD", relief="sunken")
+    except ValueError:
+        pass
+    play_note_by_key()
 
 
 def keyup(event):
     global pressed_keys
     pressed_keys.discard(event.keysym)
+    try:
+        index = BIND_KEYS.index(event.keysym)
+        if len(NOTES[index]) >= 2 and NOTES[index][1] == "b":
+            buttons[index].config(bg="black", relief="raised")
+        else:
+            buttons[index].config(bg="white", relief="raised")
+    except ValueError:
+        pass
 
 
 def oct_change(side):
@@ -74,7 +93,19 @@ def play_note_by_btn(note):
 
 
 async def play_note_by_key():
-    pass
+    sound = [0] * len(tones[0])
+    sound = np.array(sound, dtype=np.int32)
+    maximum = 100000000
+    for i in pressed_keys:
+        try:
+            index = BIND_KEYS.index(i)
+            maximum = min(maximum, max(tones[index]))
+            sound = list(map(lambda x, y: x + y, sound, tones[index]))
+        except ValueError:
+            pass
+
+    sound = sound / max(sound) * maximum
+    stream.write(np.array(sound, dtype=np.int16))
 
 
 window = Tk()
@@ -113,19 +144,22 @@ btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg
                               activeforeground="black", command=metronome_switch)
 btn_metronome_switch.place(relx=0.26, rely=0.1, relwidth=0.11, relheight=0.09)
 
-buttons = []
+buttons = [0] * len(NOTES)
 offset = 0
 for note in NOTES:
     if len(note) == 1 or (len(note) >= 2 and note[1] != "b"):
-        buttons.append(Button(window, text=note, font=FONT, bg="white", fg="black", activebackground="#DDDDDD",
-                              activeforeground="black", command=lambda arg=note: play_note_by_btn(arg)))
-        buttons[-1].place(relx=0 + offset * (1 / WHITE_NOTES), rely=0.2, relwidth=1 / WHITE_NOTES, relheight=0.69)
+        buttons[NOTES.index(note)] = Button(window, text=note, font=FONT, bg="white", fg="black",
+                                            activebackground="#DDDDDD", activeforeground="black",
+                                            command=lambda arg=note: play_note_by_btn(arg))
+        buttons[NOTES.index(note)].place(relx=0 + offset * (1 / WHITE_NOTES), rely=0.2, relwidth=1 / WHITE_NOTES,
+                                         relheight=0.69)
         offset += 1
 offset = 0
 for note in NOTES:
     if len(note) >= 2 and note[1] == "b":
-        buttons.append(Button(window, text=note, font=FONT, bg="black", fg="white", activebackground="#444444",
-                              activeforeground="white", command=lambda arg=note: play_note_by_btn(arg)))
+        buttons[NOTES.index(note)] = Button(window, text=note, font=FONT, bg="black", fg="white",
+                                            activebackground="#444444", activeforeground="white",
+                                            command=lambda arg=note: play_note_by_btn(arg))
 
         if offset == 2:
             offset = 3
@@ -134,8 +168,8 @@ for note in NOTES:
         if offset == 9:
             offset = 10
 
-        buttons[-1].place(relx=(1 / WHITE_NOTES) * 0.68 + offset * (1 / WHITE_NOTES), rely=0.2,
-                          relwidth=(1 / WHITE_NOTES) * 0.64, relheight=0.34)
+        buttons[NOTES.index(note)].place(relx=(1 / WHITE_NOTES) * 0.68 + offset * (1 / WHITE_NOTES), rely=0.2,
+                                         relwidth=(1 / WHITE_NOTES) * 0.64, relheight=0.34)
         offset += 1
 
 # Генерируем тона с заданной длительностью

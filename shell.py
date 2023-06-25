@@ -116,14 +116,14 @@ btn_metronome_switch.place(relx=0.26, rely=0.1, relwidth=0.11, relheight=0.09)
 buttons = []
 offset = 0
 for note in NOTES:
-    if len(note) == 1 or (len(note) == 2 and note[1] != "b"):
+    if len(note) == 1 or (len(note) >= 2 and note[1] != "b"):
         buttons.append(Button(window, text=note, font=FONT, bg="white", fg="black", activebackground="#DDDDDD",
                               activeforeground="black", command=lambda arg=note: play_note_by_btn(arg)))
         buttons[-1].place(relx=0 + offset * (1 / WHITE_NOTES), rely=0.2, relwidth=1 / WHITE_NOTES, relheight=0.69)
         offset += 1
 offset = 0
 for note in NOTES:
-    if len(note) == 2 and note[1] == "b":
+    if len(note) >= 2 and note[1] == "b":
         buttons.append(Button(window, text=note, font=FONT, bg="black", fg="white", activebackground="#444444",
                               activeforeground="white", command=lambda arg=note: play_note_by_btn(arg)))
 

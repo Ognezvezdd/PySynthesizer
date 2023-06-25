@@ -180,7 +180,7 @@ generator.USED_GRAPHS = True
 py_audio = pa.PyAudio()
 # Создаём поток для вывода
 stream = py_audio.open(format=py_audio.get_format_from_width(width=2),
-                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=100000)
+                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=100)
 
 window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)

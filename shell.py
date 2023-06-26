@@ -1,9 +1,10 @@
+import time
 from tkinter import *
 import asyncio
 import pyaudio as pa
 import numpy as np
 
-import Samples
+import Samples, Metrognome
 
 DURATION_TONE = 1 / 64.0
 # частота дискретизации
@@ -41,12 +42,13 @@ def keydown(event):
             buttons[index].config(bg="#DDDDDD", relief="sunken")
     except ValueError:
         pass
-    play_note_by_key()
+    asyncio.run(play_note_by_key())
 
 
 def keyup(event):
     global pressed_keys
     pressed_keys.discard(event.keysym)
+    print(event.keysym)
     try:
         index = BIND_KEYS.index(event.keysym)
         if len(NOTES[index]) >= 2 and NOTES[index][1] == "b":
@@ -55,6 +57,7 @@ def keyup(event):
             buttons[index].config(bg="white", relief="raised")
     except ValueError:
         pass
+
 
 
 def oct_change(side):
@@ -84,7 +87,7 @@ def dist_change():
 
 
 def metronome_switch():
-    pass
+    metronome.start_counter(scale_metronome)
 
 
 def play_note_by_btn(note):
@@ -135,10 +138,10 @@ btn_dist_change = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="bla
                          activeforeground="black", command=dist_change)
 btn_dist_change.place(relx=0.63, rely=0.1, relwidth=0.11, relheight=0.09)
 
-label_metronome = Label(window, text="Metronome frequency:", font=FONT, bg="black", fg="white")
+label_metronome = Label(window, text="Metronome BPM:", font=FONT, bg="black", fg="white")
 label_metronome.place(relx=0, rely=0, relwidth=0.25, relheight=0.09)
-entry_metronome = Entry(window, justify="center", font=FONT, bg="black", fg="white")
-entry_metronome.place(relx=0., rely=0.1, relwidth=0.25, relheight=0.09)
+scale_metronome = Scale(window, from_=0, to=240, orient="horizontal", bg="black", fg="white")
+scale_metronome.place(relx=0., rely=0.1, relwidth=0.25, relheight=0.09)
 btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="black",
                               activebackground=SECOND_COLOR_PRESSED,
                               activeforeground="black", command=metronome_switch)
@@ -175,13 +178,14 @@ for note in NOTES:
 # Генерируем тона с заданной длительностью
 generator = Samples.Generator(S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS, OCT_NUMBER, False)
 tones = generator.generate_tones(DURATION_TONE)
-generator.USED_GRAPHS = True
+generator.USED_GRAPHS = False
 # Инициализируем
 py_audio = pa.PyAudio()
 # Создаём поток для вывода
 stream = py_audio.open(format=py_audio.get_format_from_width(width=2),
-                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=100)
+                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=50000)
 
+metronome = Metrognome.Metronome(root=window)
 window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)
 

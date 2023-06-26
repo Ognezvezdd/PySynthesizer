@@ -48,6 +48,7 @@ class Generator:
 
     def generate_tones(self, duration):
         plt.close()
+
         if self.USED_GRAPHS:
             plt.plot()
         tones = []

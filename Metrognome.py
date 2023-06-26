@@ -51,7 +51,7 @@ class Metronome:
         if self.start:
             print(time.time())
             print(f"BPM: {self.bpm}")
-            self.time = int((60 / (self.bpm+18*self.bpm/60) - 0.1) * 1000)  # Math for delay
+            self.time = int((60 / (self.bpm + 18 * self.bpm / 60) - 0.1) * 1000)  # Math for delay
             self.beat = self.bpm / 60
             # print(self.time)
             self.count += 1

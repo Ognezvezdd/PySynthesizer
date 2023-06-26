@@ -5,7 +5,7 @@ import asyncio
 import pyaudio as pa
 import numpy as np
 
-import Samples
+import Samples, Metrognome
 
 DURATION_TONE = 1 / 64.0
 # частота дискретизации
@@ -85,25 +85,8 @@ def dist_change():
     global tones
     tones = generator.generate_tones(DURATION_TONE)
 
-
-def metronome(start_time, beat_offset):
-    global metronome_on
-    while time.time() < start_time + beat_offset:
-        time.sleep(0.01)
-    start_time += beat_offset
-    Beep(440, 100)
-
-    if metronome_on:
-        metronome(start_time, beat_offset)
-
-
 def metronome_switch():
-    global metronome_on
-    if metronome_on == False:
-        metronome_on = True
-    else:
-        metronome_on = False
-    metronome(time.time(), 60/scale_metronome.get())
+    metronome.start_counter(scale_metronome)
 
 def play_note_by_btn(note):
     stream.write(tones[NOTES.index(note)])
@@ -195,6 +178,9 @@ for note in NOTES:
 generator = Samples.Generator(S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS, OCT_NUMBER, False)
 tones = generator.generate_tones(DURATION_TONE)
 generator.USED_GRAPHS = False
+
+metronome = Metrognome.Metronome(root=window)
+
 # Инициализируем
 py_audio = pa.PyAudio()
 # Создаём поток для вывода

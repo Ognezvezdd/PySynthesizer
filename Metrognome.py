@@ -1,3 +1,4 @@
+import time
 from tkinter import *
 from winsound import Beep, SND_ALIAS, PlaySound
 
@@ -16,11 +17,9 @@ class Metronome:
         self.count = 0
         self.beat = 4
         self.time = 0
-
+        self.fixed = 1
         self.var = StringVar()
         self.var.set(self.count)
-
-        # self.interface()
 
     def interface(self):
         """Set interface for Metronome app."""
@@ -44,26 +43,26 @@ class Metronome:
                              command=lambda: self.stop_counter())
         button_stop.grid(row=2, column=1, padx=10, sticky="E")
 
-    def start_counter(self, entry):
-        print(f"BPM: {int(entry.get())}")
+    def stop_counter(self):
+        """Stop counter by setting self.start to False."""
         self.start = False
+
+    def start_counter(self, entry):
+        if self.fixed % 2 == 0:
+            self.stop_counter()
+            self.fixed += 1
+            return
+        self.fixed += 1
         if not self.start:
             try:
                 self.bpm = int(entry.get())
             except ValueError:
                 self.bpm = 60
-            else:
-                if self.bpm > 600:  # Limits BPM
-                    self.bpm = 600
         if self.bpm == 0:
-            self.start = False
+            self.stop_counter()
         else:
             self.start = True
             self.counter()
-
-    def stop_counter(self):
-        """Stop counter by setting self.start to False."""
-        self.start = False
 
     def counter(self):
         """Control counter display and audio with calculated time delay.
@@ -72,10 +71,10 @@ class Metronome:
             spinbox (tkinter.Spinbox): tkinter Spinbox widget to get beat.
         """
         if self.start:
-
+            print(f"BPM: {self.bpm}")
             self.time = int((60 / self.bpm - 0.1) * 1000)  # Math for delay
             self.beat = self.bpm / 60
-            print(self.time)
+            # print(self.time)
             self.count += 1
             self.var.set(self.count)
 

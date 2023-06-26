@@ -138,7 +138,7 @@ btn_dist_change = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="bla
                          activeforeground="black", command=dist_change)
 btn_dist_change.place(relx=0.63, rely=0.1, relwidth=0.11, relheight=0.09)
 
-label_metronome = Label(window, text="Metronome BPM:", font=FONT, bg="black", fg="white")
+label_metronome = Label(window, text="Metrognome BPM:", font=FONT, bg="black", fg="white")
 label_metronome.place(relx=0, rely=0, relwidth=0.25, relheight=0.09)
 scale_metronome = Scale(window, from_=0, to=240, orient="horizontal", bg="black", fg="white")
 scale_metronome.place(relx=0., rely=0.1, relwidth=0.25, relheight=0.09)

@@ -1,6 +1,6 @@
 import time
 from tkinter import *
-from winsound import Beep, SND_ALIAS, PlaySound
+from winsound import Beep, SND_ALIAS, PlaySound, SND_FILENAME
 
 
 class Metronome:
@@ -20,28 +20,6 @@ class Metronome:
         self.fixed = 1
         self.var = StringVar()
         self.var.set(self.count)
-
-    def interface(self):
-        """Set interface for Metronome app."""
-        frame = Frame()
-        frame.pack()
-
-        entry = Entry(frame, width=8, justify="center")
-        entry.insert(0, "60")
-        entry.grid(row=0, column=0, padx=5, sticky="E")
-
-        label_bpm = Label(frame, text="BPM:")
-        label_bpm.grid(row=0, column=0, sticky="W")
-        label_count = Label(frame, textvariable=self.var, font=("Arial", 30))
-        label_count.grid(row=1, column=0, columnspan=2)
-
-        button_start = Button(frame, text="Start", width=10, height=2,
-                              command=lambda: self.start_counter(entry))
-        button_start.grid(row=2, column=0, padx=10, sticky="W")
-
-        button_stop = Button(frame, text="Stop", width=10, height=2,
-                             command=lambda: self.stop_counter())
-        button_stop.grid(row=2, column=1, padx=10, sticky="E")
 
     def stop_counter(self):
         """Stop counter by setting self.start to False."""
@@ -71,8 +49,9 @@ class Metronome:
             spinbox (tkinter.Spinbox): tkinter Spinbox widget to get beat.
         """
         if self.start:
+            print(time.time())
             print(f"BPM: {self.bpm}")
-            self.time = int((60 / self.bpm - 0.1) * 1000)  # Math for delay
+            self.time = int((60 / (self.bpm+18*self.bpm/60) - 0.1) * 1000)  # Math for delay
             self.beat = self.bpm / 60
             # print(self.time)
             self.count += 1
@@ -80,11 +59,10 @@ class Metronome:
 
             if self.count >= self.beat:
                 self.count = 0
-            Beep(60, 40)
+            PlaySound('sound1.wav', SND_FILENAME)
 
             # Calls this method after a certain amount of time (self.time).
             self.root.after(self.time, lambda: self.counter())
-
 
 def main():
     """Call Metronome class instance with tkinter root class settings."""

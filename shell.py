@@ -1,10 +1,11 @@
 import time
 from tkinter import *
+from winsound import Beep
 import asyncio
 import pyaudio as pa
 import numpy as np
 
-import Samples, Metrognome
+import Samples
 
 DURATION_TONE = 1 / 64.0
 # частота дискретизации
@@ -59,7 +60,6 @@ def keyup(event):
         pass
 
 
-
 def oct_change(side):
     global OCT_NUMBER
     OCT_NUMBER = (OCT_NUMBER + side) % len(OCTAVES)
@@ -86,9 +86,24 @@ def dist_change():
     tones = generator.generate_tones(DURATION_TONE)
 
 
-def metronome_switch():
-    metronome.start_counter(scale_metronome)
+def metronome(start_time, beat_offset):
+    global metronome_on
+    while time.time() < start_time + beat_offset:
+        time.sleep(0.01)
+    start_time += beat_offset
+    Beep(440, 100)
 
+    if metronome_on:
+        metronome(start_time, beat_offset)
+
+
+def metronome_switch():
+    global metronome_on
+    if metronome_on == False:
+        metronome_on = True
+    else:
+        metronome_on = False
+    metronome(time.time(), 60/scale_metronome.get())
 
 def play_note_by_btn(note):
     stream.write(tones[NOTES.index(note)])
@@ -138,6 +153,7 @@ btn_dist_change = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="bla
                          activeforeground="black", command=dist_change)
 btn_dist_change.place(relx=0.63, rely=0.1, relwidth=0.11, relheight=0.09)
 
+metronome_on = False
 label_metronome = Label(window, text="Metrognome BPM:", font=FONT, bg="black", fg="white")
 label_metronome.place(relx=0, rely=0, relwidth=0.25, relheight=0.09)
 scale_metronome = Scale(window, from_=0, to=240, orient="horizontal", bg="black", fg="white")
@@ -185,7 +201,6 @@ py_audio = pa.PyAudio()
 stream = py_audio.open(format=py_audio.get_format_from_width(width=2),
                        channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=50000)
 
-metronome = Metrognome.Metronome(root=window)
 window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)
 

@@ -22,8 +22,9 @@ GENERATION_TYPE = "sinus"
 GENERATION_TYPES = ["sinus", "saw", 'guitar']
 EFFECTS = {'distortion': 1}
 
+AMOUNT_PIANOS = 2
 BIND_KEYS = ["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"]
-AMOUNT_OCT = 1
+AMOUNT_OCT = 2
 WHITE_NOTES = AMOUNT_OCT * 7 + 1
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
 i = 1
@@ -73,7 +74,7 @@ def keyup(event):
 
 def oct_change(side):
     global OCT_NUMBER
-    OCT_NUMBER = (OCT_NUMBER + side) % len(OCTAVES)
+    OCT_NUMBER = (OCT_NUMBER + side) % (len(OCTAVES) - AMOUNT_OCT + 1)
     label_octnumber.config(text=f"{(OCTAVES[OCT_NUMBER])}")
 
     generator.OCT_NUMBER = OCT_NUMBER
@@ -131,11 +132,11 @@ def start_record():
 def record():
     global record_on
     if record_on:
-        btn_record.config(text="off")
+        btn_record.config(text="not rec")
         record_on = False
         stop_record()
     else:
-        btn_record.config(text="record")
+        btn_record.config(text="recording")
         record_on = True
         start_record()
 
@@ -169,76 +170,101 @@ async def play_note_by_key():
 window = Tk()
 window.title("FL studio")
 window.configure(bg=FIRST_COLOR)
-width = WHITE_NOTES * 110
-window.geometry(f"{width}x540")
+width = WHITE_NOTES * 90
+height = AMOUNT_PIANOS * 400 + 60
+window.geometry(f"{width}x{height}")
 # window.geometry("960x540")
 
-label_octnumber = Label(window, text=f"{(OCTAVES[OCT_NUMBER])}", font=FONT, bg="black", fg="white")
-label_octnumber.place(relx=0.26, rely=0, relwidth=0.48, relheight=0.09)
-btn_oct_plus = Button(window, text="Oct+", font=FONT, bg=SECOND_COLOR, fg="black",
-                      activebackground=SECOND_COLOR_PRESSED, activeforeground="black", command=lambda: oct_change(1))
-btn_oct_plus.place(relx=0.875, rely=0.9, relwidth=0.125, relheight=0.1)
-btn_oct_minus = Button(window, text="Oct-", font=FONT, bg=SECOND_COLOR, fg="black",
-                       activebackground=SECOND_COLOR_PRESSED, activeforeground="black", command=lambda: oct_change(-1))
-btn_oct_minus.place(relx=0, rely=0.9, relwidth=0.125, relheight=0.1)
+labels_octnumber = []
+btns_oct_plus = []
+btns_oct_minus = []
+btns_gen_change = []
+labels_dist = []
+scales_dist = []
+btns_dist_change = []
+btns = []
 
-btn_gen_change = Button(window, text=f"{GENERATION_TYPE}", font=FONT, bg=SECOND_COLOR, fg="black",
-                        activebackground=SECOND_COLOR_PRESSED, activeforeground="black", command=gen_change)
-btn_gen_change.place(relx=0.38, rely=0.1, relwidth=0.24, relheight=0.09)
+for i in range(0, AMOUNT_PIANOS):
 
-label_dist = Label(window, text="Distortion:", font=FONT, bg="black", fg="white")
-label_dist.place(relx=0.75, rely=0, relwidth=0.25, relheight=0.09)
-scale_dist = Scale(window, from_=10, to=100, orient="horizontal", bg="black", fg="white")
-scale_dist.place(relx=0.75, rely=0.1, relwidth=0.25, relheight=0.09)
-btn_dist_change = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="black",
-                         activebackground=SECOND_COLOR_PRESSED,
-                         activeforeground="black", command=dist_change)
-btn_dist_change.place(relx=0.63, rely=0.1, relwidth=0.11, relheight=0.09)
+    label_octnumber = Label(window, text=f"{(OCTAVES[OCT_NUMBER])}", font=FONT, bg="black", fg="white")
+    label_octnumber.place(relx=0.38, rely=(0.9 / AMOUNT_PIANOS) * i + 0.01 / AMOUNT_PIANOS, relwidth=0.24,
+                          relheight=0.08 / AMOUNT_PIANOS)
+    btn_oct_plus = Button(window, text="Oct+", font=FONT, bg=SECOND_COLOR, fg="black",
+                          activebackground=SECOND_COLOR_PRESSED, activeforeground="black",
+                          command=lambda: oct_change(1))
+    btn_oct_plus.place(relx=0.63, rely=(0.9 / AMOUNT_PIANOS) * i + 0.01 / AMOUNT_PIANOS, relwidth=0.11,
+                       relheight=0.08 / AMOUNT_PIANOS)
+    btn_oct_minus = Button(window, text="Oct-", font=FONT, bg=SECOND_COLOR, fg="black",
+                           activebackground=SECOND_COLOR_PRESSED, activeforeground="black",
+                           command=lambda: oct_change(-1))
+    btn_oct_minus.place(relx=0.26, rely=(0.9 / AMOUNT_PIANOS) * i + 0.01 / AMOUNT_PIANOS, relwidth=0.11,
+                        relheight=0.08 / AMOUNT_PIANOS)
+
+    btn_gen_change = Button(window, text=f"{GENERATION_TYPE}", font=FONT, bg=SECOND_COLOR, fg="black",
+                            activebackground=SECOND_COLOR_PRESSED, activeforeground="black", command=gen_change)
+    btn_gen_change.place(relx=0.38, rely=(0.9 / AMOUNT_PIANOS) * i + 0.1 / AMOUNT_PIANOS, relwidth=0.24,
+                         relheight=0.09 / AMOUNT_PIANOS)
+
+    label_dist = Label(window, text="Distortion:", font=FONT, bg="black", fg="white")
+    label_dist.place(relx=0.75, rely=(0.9 / AMOUNT_PIANOS) * i + 0.01 / AMOUNT_PIANOS, relwidth=0.24,
+                     relheight=0.08 / AMOUNT_PIANOS)
+    scale_dist = Scale(window, from_=10, to=100, orient="horizontal", bg="black", fg="white", font="arial 10")
+    scale_dist.place(relx=0.75, rely=(0.9 / AMOUNT_PIANOS) * i + 0.1 / AMOUNT_PIANOS, relwidth=0.24,
+                     relheight=0.09 / AMOUNT_PIANOS)
+    btn_dist_change = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="black",
+                             activebackground=SECOND_COLOR_PRESSED,
+                             activeforeground="black", command=dist_change)
+    btn_dist_change.place(relx=0.63, rely=(0.9 / AMOUNT_PIANOS) * i + 0.1 / AMOUNT_PIANOS, relwidth=0.11,
+                          relheight=0.09 / AMOUNT_PIANOS)
+
+    buttons = [0] * len(NOTES)
+    offset = 0
+    for note in NOTES:
+        if len(note) == 1 or (len(note) >= 2 and note[1] != "b"):
+            buttons[NOTES.index(note)] = Button(window, text=note, font=FONT, bg="white", fg="black",
+                                                activebackground="#DDDDDD", activeforeground="black",
+                                                command=lambda arg=note: play_note_by_btn(arg))
+            buttons[NOTES.index(note)].place(relx=0 + offset * (1 / WHITE_NOTES),
+                                             rely=(0.9 / AMOUNT_PIANOS) * i + 0.2 / AMOUNT_PIANOS,
+                                             relwidth=1 / WHITE_NOTES,
+                                             relheight=0.69 / AMOUNT_PIANOS)
+            offset += 1
+    offset = 0
+    for note in NOTES:
+        if len(note) >= 2 and note[1] == "b":
+            buttons[NOTES.index(note)] = Button(window, text=note, font=FONT, bg="black", fg="white",
+                                                activebackground="#444444", activeforeground="white",
+                                                command=lambda arg=note: play_note_by_btn(arg))
+
+            if offset % 7 == 2:
+                offset += 1
+            if offset % 7 == 6:
+                offset += 1
+
+            buttons[NOTES.index(note)].place(relx=(1 / WHITE_NOTES) * 0.68 + offset * (1 / WHITE_NOTES),
+                                             rely=(0.9 / AMOUNT_PIANOS) * i + 0.2 / AMOUNT_PIANOS,
+                                             relwidth=(1 / WHITE_NOTES) * 0.64, relheight=0.34 / AMOUNT_PIANOS)
+            offset += 1
+
+record_on = False
+btn_record = Button(window, text="not rec", font=FONT, bg=SECOND_COLOR, fg="black",
+                    activebackground=SECOND_COLOR_PRESSED,
+                    activeforeground="black", command=record)
+btn_record.place(relx=0.42, rely=0.9, relwidth=0.16, relheight=0.09)
 
 metronome_on = False
 label_metronome = Label(window, text="Metrognome BPM:", font=FONT, bg="black", fg="white")
-label_metronome.place(relx=0, rely=0, relwidth=0.25, relheight=0.09)
-scale_metronome = Scale(window, from_=0, to=240, orient="horizontal", bg="black", fg="white")
-scale_metronome.place(relx=0., rely=0.1, relwidth=0.25, relheight=0.09)
+label_metronome.place(relx=0.01, rely=0.9, relwidth=0.24, relheight=0.04)
+scale_metronome = Scale(window, from_=0, to=240, orient="horizontal", bg="black", fg="white", font="arial 10")
+scale_metronome.place(relx=0.01, rely=0.95, relwidth=0.24, relheight=0.04)
 btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="black",
                               activebackground=SECOND_COLOR_PRESSED,
                               activeforeground="black", command=metronome_switch)
-btn_metronome_switch.place(relx=0.26, rely=0.1, relwidth=0.11, relheight=0.09)
-
-record_on = False
-btn_record = Button(window, text="off", font=FONT, bg=SECOND_COLOR, fg="black",
-                    activebackground=SECOND_COLOR_PRESSED,
-                    activeforeground="black", command=record)
-btn_record.place(relx=0.38, rely=0.9, relwidth=0.24, relheight=0.1)
-
-buttons = [0] * len(NOTES)
-offset = 0
-for note in NOTES:
-    if len(note) == 1 or (len(note) >= 2 and note[1] != "b"):
-        buttons[NOTES.index(note)] = Button(window, text=note, font=FONT, bg="white", fg="black",
-                                            activebackground="#DDDDDD", activeforeground="black",
-                                            command=lambda arg=note: play_note_by_btn(arg))
-        buttons[NOTES.index(note)].place(relx=0 + offset * (1 / WHITE_NOTES), rely=0.2, relwidth=1 / WHITE_NOTES,
-                                         relheight=0.69)
-        offset += 1
-offset = 0
-for note in NOTES:
-    if len(note) >= 2 and note[1] == "b":
-        buttons[NOTES.index(note)] = Button(window, text=note, font=FONT, bg="black", fg="white",
-                                            activebackground="#444444", activeforeground="white",
-                                            command=lambda arg=note: play_note_by_btn(arg))
-
-        if offset % 7 == 2:
-            offset += 1
-        if offset % 7 == 6:
-            offset += 1
-
-        buttons[NOTES.index(note)].place(relx=(1 / WHITE_NOTES) * 0.68 + offset * (1 / WHITE_NOTES), rely=0.2,
-                                         relwidth=(1 / WHITE_NOTES) * 0.64, relheight=0.34)
-        offset += 1
+btn_metronome_switch.place(relx=0.26, rely=0.9, relwidth=0.15, relheight=0.09)
 
 # Генерируем тона с заданной длительностью
-generator = Samples.Generator(S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS, OCT_NUMBER, False)
+generator = Samples.Generator(S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS, OCT_NUMBER, AMOUNT_OCT,
+                              False)
 tones = generator.generate_tones(DURATION_TONE)
 generator.USED_GRAPHS = False
 

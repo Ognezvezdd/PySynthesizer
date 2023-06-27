@@ -7,7 +7,7 @@ import guitar
 class Generator:
 
     def __init__(self, S_16BIT: int, SAMPLE_RATE: int, GENERATION_TYPES: list, GENERATION_TYPE: str, EFFECTS: dict,
-                 OCT_NUMBER: int, USED_GRAPHS: bool = False):
+                 OCT_NUMBER: int, AMOUNT_OCT: int, USED_GRAPHS: bool = False):
         self.OCT_NUMBER = OCT_NUMBER
         self.S_16BIT = S_16BIT
         self.SAMPLE_RATE = SAMPLE_RATE
@@ -15,6 +15,7 @@ class Generator:
         self.GENERATION_TYPE = GENERATION_TYPE
         self.EFFECTS = EFFECTS
         self.USED_GRAPHS = USED_GRAPHS
+        self.AMOUNT_OCT = AMOUNT_OCT
 
     def generate_sample(self, freq, duration, volume):
         # амплитуда
@@ -53,8 +54,8 @@ class Generator:
             plt.plot()
         tones = []
         i = 0
-        print([self.generate_notes(n) for n in range(1, 14, 1)])
-        freq_array = np.array([self.generate_notes(n) for n in range(1, 14)])
+        print([self.generate_notes(n) for n in range(1, (self.AMOUNT_OCT * 12 + 2), 1)])
+        freq_array = np.array([self.generate_notes(n) for n in range(1, (self.AMOUNT_OCT * 12 + 2))])
         for freq in freq_array:
             i += 1
             # np.array нужен для преобразования данных под формат 16 бит (dtype=np.int16)

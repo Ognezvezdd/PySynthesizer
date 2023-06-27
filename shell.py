@@ -104,8 +104,6 @@ def stop_record():
     print('Finished recording!')
     wf = wave.open(filename, 'wb')
     channels = 2
-    music_file = wave.open("result2.wav", "wb")
-
     wf.setnchannels(channels)
     wf.setsampwidth(py_audio.get_sample_size(py_audio.get_format_from_width(width=2)))
     wf.setframerate(SAMPLE_RATE)

@@ -247,9 +247,12 @@ metronome = Metrognome.Metronome(root=window)
 # Инициализируем
 py_audio = pa.PyAudio()
 # Создаём поток для вывода
+print(py_audio.get_default_output_device_info())
 BUFFER = 1024 * 8 * 3
+
+# print(py_audio.is_format_supported(rate='both'))
 stream = py_audio.open(format=py_audio.get_format_from_width(width=2),
-                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER, input=True)
+                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER)
 
 window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)

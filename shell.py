@@ -1,5 +1,8 @@
 import time
+import wave
 from tkinter import *
+
+import pyaudio
 from winsound import Beep
 import asyncio
 import pyaudio as pa
@@ -21,8 +24,9 @@ GENERATION_TYPES = ["sinus", "saw", 'guitar']
 EFFECTS = {'distortion': 1}
 
 BIND_KEYS = ["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"]
-NOTES = ["C1", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H", "C2"]
-WHITE_NOTES = 8
+NOTES = ["C1", "Db1", "D1", "Eb1", "E1", "F1", "Gb1", "G1", "Ab1", "A1", "Hb1", "H1", "C2", "Db2", "D2", "Eb2", "E2",
+         "F2", "Gb2", "G2", "Ab2", "A2", "Hb2", "H2", "C3"]
+WHITE_NOTES = 15
 
 FONT = "Arial 16"
 FIRST_COLOR = "#666666"
@@ -90,19 +94,47 @@ def metronome_switch():
     metronome.start_counter(scale_metronome)
 
 
+frames = []
+filename = "output_sound.wav"
+
+stream2: pyaudio.Stream
+
+
+def stop_record():
+    print(frames)
+    print('Finished recording!')
+    wf = wave.open(filename, 'wb')
+    channels = 2
+    music_file = wave.open("result2.wav", "wb")
+
+    wf.setnchannels(channels)
+    wf.setsampwidth(py_audio.get_sample_size(py_audio.get_format_from_width(width=2)))
+    wf.setframerate(SAMPLE_RATE)
+    wf.writeframes(b''.join(frames))
+    wf.close()
+
+
+def start_record():
+    print('Recording...')
+
+
 def record():
     global record_on
-    if record_on == True:
+    if record_on:
         btn_record.config(text="off")
         record_on = False
+        stop_record()
     else:
         btn_record.config(text="record")
         record_on = True
+        start_record()
 
 
 def play_note_by_btn(note):
     stream.write(tones[NOTES.index(note)])
     print(note)
+    if record_on:
+        frames.append(tones[NOTES.index(note)])
 
 
 async def play_note_by_key():
@@ -119,12 +151,16 @@ async def play_note_by_key():
 
     sound = sound / max(sound) * maximum
     stream.write(np.array(sound, dtype=np.int16))
+    if record_on:
+        frames.append(np.array(sound, dtype=np.int16))
+        print(len(stream.read(BUFFER)))
 
 
 window = Tk()
 window.title("FL studio")
 window.configure(bg=FIRST_COLOR)
 window.geometry("960x540")
+# window.geometry("1920x1080")
 
 label_octnumber = Label(window, text=f"{(OCTAVES[OCT_NUMBER])}", font=FONT, bg="black", fg="white")
 label_octnumber.place(relx=0.26, rely=0, relwidth=0.48, relheight=0.09)
@@ -202,8 +238,9 @@ metronome = Metrognome.Metronome(root=window)
 # Инициализируем
 py_audio = pa.PyAudio()
 # Создаём поток для вывода
+BUFFER = 1024 * 8 * 3
 stream = py_audio.open(format=py_audio.get_format_from_width(width=2),
-                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=50000)
+                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER, input=True)
 
 window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)

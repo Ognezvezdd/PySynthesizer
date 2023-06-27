@@ -1,7 +1,9 @@
 import asyncio
+import time
 import wave
 from tkinter import *
 
+import os
 import numpy as np
 import pyaudio
 import pyaudio as pa
@@ -14,7 +16,6 @@ DURATION_TONE = 1 / 64.0
 SAMPLE_RATE = 44100
 # 16-ти битный звук (2 ** 16 -- максимальное значение для int16)
 S_16BIT = 2 ** 16
-
 OCT_NUMBER = 3
 OCTAVES = ["contr", "greate", "small", "first", "second", "third", "fourth"]
 
@@ -94,14 +95,17 @@ def metronome_switch():
 
 
 frames = []
-filename = "output_sound.wav"
-
-stream2: pyaudio.Stream
 
 
 def stop_record():
     print(frames)
     print('Finished recording!')
+    current_time = str(time.strftime("%H-%M-%S", time.localtime()))
+    filename = "Records/" + "record " + current_time + ".wav"
+    file_path = f'Records/{filename}'
+    if os.path.exists(file_path):
+        filename = filename[:-5] + "1" + ".wav"
+    print(filename)
     wf = wave.open(filename, 'wb')
     channels = 2
     wf.setnchannels(channels)
@@ -113,6 +117,8 @@ def stop_record():
 
 def start_record():
     print('Recording...')
+    global frames
+    frames = []
 
 
 def record():

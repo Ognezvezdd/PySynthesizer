@@ -16,7 +16,7 @@ SAMPLE_RATE = 44100
 # 16-ти битный звук (2 ** 16 -- максимальное значение для int16)
 S_16BIT = 2 ** 16
 
-AMOUNT_PIANOS = 2
+AMOUNT_PIANOS = 1
 
 OCT_NUMBERS = [3] * AMOUNT_PIANOS
 OCTAVES = ["contr", "greate", "small", "first", "second", "third", "fourth"]
@@ -26,7 +26,7 @@ GENERATIONS_TYPES = ["sinus", "saw", 'guitar']
 EFFECTS = {'distortion': 1}
 
 BIND_KEYS = ["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"]
-AMOUNT_OCT = 2
+AMOUNT_OCT = 1
 WHITE_NOTES = AMOUNT_OCT * 7 + 1
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
 oct_num = 1
@@ -174,7 +174,7 @@ window = Tk()
 window.title("FL studio")
 window.configure(bg=FIRST_COLOR)
 width = WHITE_NOTES * 90
-height = AMOUNT_PIANOS * 300 + 360
+height = AMOUNT_PIANOS * 360 + 180
 window.geometry(f"{width}x{height}")
 # window.geometry("960x540")
 
@@ -259,17 +259,17 @@ record_on = False
 btn_record = Button(window, text="not rec", font=FONT, bg=SECOND_COLOR, fg="black",
                     activebackground=SECOND_COLOR_PRESSED,
                     activeforeground="black", command=record)
-btn_record.place(relx=0.42, rely=0.9, relwidth=0.16, relheight=0.09)
+btn_record.place(relx=0.75, rely=0.9, relwidth=0.24, relheight=0.09)
 
 metronome_on = False
 label_metronome = Label(window, text="Metrognome BPM:", font=FONT, bg="black", fg="white")
-label_metronome.place(relx=0.01, rely=0.9, relwidth=0.24, relheight=0.04)
-scale_metronome = Scale(window, from_=0, to=240, orient="horizontal", bg="black", fg="white", font="arial 10")
-scale_metronome.place(relx=0.01, rely=0.94, relwidth=0.24, relheight=0.05)
+label_metronome.place(relx=0.01, rely=0.9, relwidth=0.24, relheight=0.09)
+scale_metronome = Scale(window, from_=0, to=180, orient="horizontal", bg="black", fg="white", font="arial 10")
+scale_metronome.place(relx=0.26, rely=0.9, relwidth=0.23, relheight=0.09)
 btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="black",
                               activebackground=SECOND_COLOR_PRESSED,
                               activeforeground="black", command=metronome_switch)
-btn_metronome_switch.place(relx=0.26, rely=0.9, relwidth=0.15, relheight=0.09)
+btn_metronome_switch.place(relx=0.51, rely=0.9, relwidth=0.23, relheight=0.09)
 
 # Генерируем тона с заданной длительностью
 generator = Samples.Generator(S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0], EFFECTS, OCT_NUMBERS[0],

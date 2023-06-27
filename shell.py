@@ -15,26 +15,28 @@ DURATION_TONE = 1 / 64.0
 SAMPLE_RATE = 44100
 # 16-ти битный звук (2 ** 16 -- максимальное значение для int16)
 S_16BIT = 2 ** 16
-OCT_NUMBER = 3
-OCTAVES = ["contr", "greate", "small", "first", "second", "third", "fourth"]
-
-GENERATION_TYPE = "sinus"
-GENERATION_TYPES = ["sinus", "saw", 'guitar']
-EFFECTS = {'distortion': 1}
 
 AMOUNT_PIANOS = 2
+
+OCT_NUMBERS = [3] * AMOUNT_PIANOS
+OCTAVES = ["contr", "greate", "small", "first", "second", "third", "fourth"]
+
+GENERATION_TYPES = ["sinus"] * AMOUNT_PIANOS
+GENERATIONS_TYPES = ["sinus", "saw", 'guitar']
+EFFECTS = {'distortion': 1}
+
 BIND_KEYS = ["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"]
 AMOUNT_OCT = 2
 WHITE_NOTES = AMOUNT_OCT * 7 + 1
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
-i = 1
+oct_num = 1
 try:
-    for i in range(1, AMOUNT_OCT):
+    for piano_num in range(1, AMOUNT_OCT):
         for j in range(0, 12):
-            NOTES.append(NOTES[j] + str(i))
+            NOTES.append(NOTES[j] + str(oct_num))
 except EXCEPTION as es:
     print(es)
-NOTES.append(NOTES[0] + str(i + 1))
+NOTES.append(NOTES[0] + str(oct_num + 1))
 
 FONT = "Arial 16"
 FIRST_COLOR = "#666666"
@@ -72,28 +74,29 @@ def keyup(event):
         pass
 
 
-def oct_change(side):
-    global OCT_NUMBER
-    OCT_NUMBER = (OCT_NUMBER + side) % (len(OCTAVES) - AMOUNT_OCT + 1)
-    label_octnumber.config(text=f"{(OCTAVES[OCT_NUMBER])}")
+def oct_change(side, piano_num):
+    global OCT_NUMBERS
+    OCT_NUMBERS[piano_num] = (OCT_NUMBERS[piano_num] + side) % (len(OCTAVES) - AMOUNT_OCT + 1)
+    labels_octnumber[piano_num].config(text=f"{(OCTAVES[OCT_NUMBERS[piano_num]])}")
 
-    generator.OCT_NUMBER = OCT_NUMBER
+    generator.OCT_NUMBER = OCT_NUMBERS[0]
     global tones
     tones = generator.generate_tones(DURATION_TONE)
 
 
-def gen_change():
-    global GENERATION_TYPE
-    GENERATION_TYPE = GENERATION_TYPES[(GENERATION_TYPES.index(GENERATION_TYPE) + 1) % len(GENERATION_TYPES)]
-    btn_gen_change.config(text=f"{GENERATION_TYPE}")
+def gen_change(piano_num):
+    global GENERATION_TYPES
+    GENERATION_TYPES[piano_num] = GENERATIONS_TYPES[
+        (GENERATIONS_TYPES.index(GENERATION_TYPES[piano_num]) + 1) % len(GENERATIONS_TYPES)]
+    btns_gen_change[piano_num].config(text=f"{GENERATION_TYPES[piano_num]}")
 
-    generator.GENERATION_TYPE = GENERATION_TYPE
+    generator.GENERATION_TYPE = GENERATION_TYPES[0]
     global tones
     tones = generator.generate_tones(DURATION_TONE)
 
 
-def dist_change():
-    generator.config_duration(str(scale_dist.get()))
+def dist_change(piano_num):
+    generator.config_duration(str(scales_dist[piano_num].get()))
     global tones
     tones = generator.generate_tones(DURATION_TONE)
 
@@ -171,7 +174,7 @@ window = Tk()
 window.title("FL studio")
 window.configure(bg=FIRST_COLOR)
 width = WHITE_NOTES * 90
-height = AMOUNT_PIANOS * 400 + 60
+height = AMOUNT_PIANOS * 300 + 360
 window.geometry(f"{width}x{height}")
 # window.geometry("960x540")
 
@@ -184,38 +187,44 @@ scales_dist = []
 btns_dist_change = []
 btns = []
 
-for i in range(0, AMOUNT_PIANOS):
+for piano_num in range(0, AMOUNT_PIANOS):
 
-    label_octnumber = Label(window, text=f"{(OCTAVES[OCT_NUMBER])}", font=FONT, bg="black", fg="white")
-    label_octnumber.place(relx=0.38, rely=(0.9 / AMOUNT_PIANOS) * i + 0.01 / AMOUNT_PIANOS, relwidth=0.24,
-                          relheight=0.08 / AMOUNT_PIANOS)
-    btn_oct_plus = Button(window, text="Oct+", font=FONT, bg=SECOND_COLOR, fg="black",
-                          activebackground=SECOND_COLOR_PRESSED, activeforeground="black",
-                          command=lambda: oct_change(1))
-    btn_oct_plus.place(relx=0.63, rely=(0.9 / AMOUNT_PIANOS) * i + 0.01 / AMOUNT_PIANOS, relwidth=0.11,
-                       relheight=0.08 / AMOUNT_PIANOS)
-    btn_oct_minus = Button(window, text="Oct-", font=FONT, bg=SECOND_COLOR, fg="black",
-                           activebackground=SECOND_COLOR_PRESSED, activeforeground="black",
-                           command=lambda: oct_change(-1))
-    btn_oct_minus.place(relx=0.26, rely=(0.9 / AMOUNT_PIANOS) * i + 0.01 / AMOUNT_PIANOS, relwidth=0.11,
-                        relheight=0.08 / AMOUNT_PIANOS)
+    labels_octnumber.append(
+        Label(window, text=f"{(OCTAVES[OCT_NUMBERS[piano_num]])}", font=FONT, bg="black", fg="white"))
+    labels_octnumber[piano_num].place(relx=0.38, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.01 / AMOUNT_PIANOS,
+                                      relwidth=0.24,
+                                      relheight=0.08 / AMOUNT_PIANOS)
+    btns_oct_plus.append(
+        Button(window, text="Oct+", font=FONT, bg=SECOND_COLOR, fg="black", activebackground=SECOND_COLOR_PRESSED,
+               activeforeground="black", command=lambda arg=piano_num: oct_change(1, arg)))
+    btns_oct_plus[piano_num].place(relx=0.63, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.01 / AMOUNT_PIANOS,
+                                   relwidth=0.11,
+                                   relheight=0.08 / AMOUNT_PIANOS)
+    btns_oct_minus.append(
+        Button(window, text="Oct-", font=FONT, bg=SECOND_COLOR, fg="black", activebackground=SECOND_COLOR_PRESSED,
+               activeforeground="black", command=lambda arg=piano_num: oct_change(-1, arg)))
+    btns_oct_minus[piano_num].place(relx=0.26, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.01 / AMOUNT_PIANOS,
+                                    relwidth=0.11,
+                                    relheight=0.08 / AMOUNT_PIANOS)
 
-    btn_gen_change = Button(window, text=f"{GENERATION_TYPE}", font=FONT, bg=SECOND_COLOR, fg="black",
-                            activebackground=SECOND_COLOR_PRESSED, activeforeground="black", command=gen_change)
-    btn_gen_change.place(relx=0.38, rely=(0.9 / AMOUNT_PIANOS) * i + 0.1 / AMOUNT_PIANOS, relwidth=0.24,
-                         relheight=0.09 / AMOUNT_PIANOS)
+    btns_gen_change.append(Button(window, text=f"{GENERATION_TYPES[piano_num]}", font=FONT, bg=SECOND_COLOR, fg="black",
+                                  activebackground=SECOND_COLOR_PRESSED, activeforeground="black",
+                                  command=lambda arg=piano_num: gen_change(arg)))
+    btns_gen_change[piano_num].place(relx=0.38, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.1 / AMOUNT_PIANOS,
+                                     relwidth=0.24,
+                                     relheight=0.09 / AMOUNT_PIANOS)
 
-    label_dist = Label(window, text="Distortion:", font=FONT, bg="black", fg="white")
-    label_dist.place(relx=0.75, rely=(0.9 / AMOUNT_PIANOS) * i + 0.01 / AMOUNT_PIANOS, relwidth=0.24,
-                     relheight=0.08 / AMOUNT_PIANOS)
-    scale_dist = Scale(window, from_=10, to=100, orient="horizontal", bg="black", fg="white", font="arial 10")
-    scale_dist.place(relx=0.75, rely=(0.9 / AMOUNT_PIANOS) * i + 0.1 / AMOUNT_PIANOS, relwidth=0.24,
-                     relheight=0.09 / AMOUNT_PIANOS)
-    btn_dist_change = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="black",
-                             activebackground=SECOND_COLOR_PRESSED,
-                             activeforeground="black", command=dist_change)
-    btn_dist_change.place(relx=0.63, rely=(0.9 / AMOUNT_PIANOS) * i + 0.1 / AMOUNT_PIANOS, relwidth=0.11,
-                          relheight=0.09 / AMOUNT_PIANOS)
+    labels_dist.append(Label(window, text="Distortion:", font=FONT, bg="black", fg="white"))
+    labels_dist[piano_num].place(relx=0.75, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.01 / AMOUNT_PIANOS,
+                                 relwidth=0.24, relheight=0.08 / AMOUNT_PIANOS)
+    scales_dist.append(Scale(window, from_=10, to=100, orient="horizontal", bg="black", fg="white", font="arial 10"))
+    scales_dist[piano_num].place(relx=0.75, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.1 / AMOUNT_PIANOS, relwidth=0.24,
+                                 relheight=0.09 / AMOUNT_PIANOS)
+    btns_dist_change.append(
+        Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="black", activebackground=SECOND_COLOR_PRESSED,
+               activeforeground="black", command=lambda arg=piano_num: dist_change(arg)))
+    btns_dist_change[piano_num].place(relx=0.63, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.1 / AMOUNT_PIANOS,
+                                      relwidth=0.11, relheight=0.09 / AMOUNT_PIANOS)
 
     buttons = [0] * len(NOTES)
     offset = 0
@@ -225,9 +234,8 @@ for i in range(0, AMOUNT_PIANOS):
                                                 activebackground="#DDDDDD", activeforeground="black",
                                                 command=lambda arg=note: play_note_by_btn(arg))
             buttons[NOTES.index(note)].place(relx=0 + offset * (1 / WHITE_NOTES),
-                                             rely=(0.9 / AMOUNT_PIANOS) * i + 0.2 / AMOUNT_PIANOS,
-                                             relwidth=1 / WHITE_NOTES,
-                                             relheight=0.69 / AMOUNT_PIANOS)
+                                             rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.2 / AMOUNT_PIANOS,
+                                             relwidth=1 / WHITE_NOTES, relheight=0.69 / AMOUNT_PIANOS)
             offset += 1
     offset = 0
     for note in NOTES:
@@ -242,9 +250,10 @@ for i in range(0, AMOUNT_PIANOS):
                 offset += 1
 
             buttons[NOTES.index(note)].place(relx=(1 / WHITE_NOTES) * 0.68 + offset * (1 / WHITE_NOTES),
-                                             rely=(0.9 / AMOUNT_PIANOS) * i + 0.2 / AMOUNT_PIANOS,
+                                             rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.2 / AMOUNT_PIANOS,
                                              relwidth=(1 / WHITE_NOTES) * 0.64, relheight=0.34 / AMOUNT_PIANOS)
             offset += 1
+    btns.append(buttons)
 
 record_on = False
 btn_record = Button(window, text="not rec", font=FONT, bg=SECOND_COLOR, fg="black",
@@ -256,15 +265,15 @@ metronome_on = False
 label_metronome = Label(window, text="Metrognome BPM:", font=FONT, bg="black", fg="white")
 label_metronome.place(relx=0.01, rely=0.9, relwidth=0.24, relheight=0.04)
 scale_metronome = Scale(window, from_=0, to=240, orient="horizontal", bg="black", fg="white", font="arial 10")
-scale_metronome.place(relx=0.01, rely=0.95, relwidth=0.24, relheight=0.04)
+scale_metronome.place(relx=0.01, rely=0.94, relwidth=0.24, relheight=0.05)
 btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg="black",
                               activebackground=SECOND_COLOR_PRESSED,
                               activeforeground="black", command=metronome_switch)
 btn_metronome_switch.place(relx=0.26, rely=0.9, relwidth=0.15, relheight=0.09)
 
 # Генерируем тона с заданной длительностью
-generator = Samples.Generator(S_16BIT, SAMPLE_RATE, GENERATION_TYPES, GENERATION_TYPE, EFFECTS, OCT_NUMBER, AMOUNT_OCT,
-                              False)
+generator = Samples.Generator(S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0], EFFECTS, OCT_NUMBERS[0],
+                              AMOUNT_OCT, False)
 tones = generator.generate_tones(DURATION_TONE)
 generator.USED_GRAPHS = False
 

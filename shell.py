@@ -5,7 +5,6 @@ from tkinter import *
 
 import os
 import numpy as np
-import pyaudio
 import pyaudio as pa
 
 import Metrognome
@@ -24,13 +23,17 @@ GENERATION_TYPES = ["sinus", "saw", 'guitar']
 EFFECTS = {'distortion': 1}
 
 BIND_KEYS = ["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"]
-AMOUNT_OCT = 2
-WHITE_NOTES = AMOUNT_OCT*7+1
+AMOUNT_OCT = 1
+WHITE_NOTES = AMOUNT_OCT * 7 + 1
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
-for i in range (1, AMOUNT_OCT):
-    for j in range (0, 7):
-        NOTES.append(NOTES[j]+str(i))
-NOTES.append(NOTES[0]+str(i+1))
+i = 1
+try:
+    for i in range(1, AMOUNT_OCT):
+        for j in range(0, 12):
+            NOTES.append(NOTES[j] + str(i))
+except EXCEPTION as es:
+    print(es)
+NOTES.append(NOTES[0] + str(i + 1))
 
 FONT = "Arial 16"
 FIRST_COLOR = "#666666"
@@ -166,8 +169,9 @@ async def play_note_by_key():
 window = Tk()
 window.title("FL studio")
 window.configure(bg=FIRST_COLOR)
-window.geometry("960x540")
-# window.geometry("1920x1080")
+width = WHITE_NOTES * 110
+window.geometry(f"{width}x540")
+# window.geometry("960x540")
 
 label_octnumber = Label(window, text=f"{(OCTAVES[OCT_NUMBER])}", font=FONT, bg="black", fg="white")
 label_octnumber.place(relx=0.26, rely=0, relwidth=0.48, relheight=0.09)
@@ -224,12 +228,10 @@ for note in NOTES:
                                             activebackground="#444444", activeforeground="white",
                                             command=lambda arg=note: play_note_by_btn(arg))
 
-        if offset == 2:
-            offset = 3
-        if offset == 6:
-            offset = 7
-        if offset == 9:
-            offset = 10
+        if offset % 7 == 2:
+            offset += 1
+        if offset % 7 == 6:
+            offset += 1
 
         buttons[NOTES.index(note)].place(relx=(1 / WHITE_NOTES) * 0.68 + offset * (1 / WHITE_NOTES), rely=0.2,
                                          relwidth=(1 / WHITE_NOTES) * 0.64, relheight=0.34)

@@ -23,9 +23,13 @@ GENERATION_TYPES = ["sinus", "saw", 'guitar']
 EFFECTS = {'distortion': 1}
 
 BIND_KEYS = ["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"]
-NOTES = ["C1", "Db1", "D1", "Eb1", "E1", "F1", "Gb1", "G1", "Ab1", "A1", "Hb1", "H1", "C2", "Db2", "D2", "Eb2", "E2",
-         "F2", "Gb2", "G2", "Ab2", "A2", "Hb2", "H2", "C3"]
-WHITE_NOTES = 15
+AMOUNT_OCT = 2
+WHITE_NOTES = AMOUNT_OCT*7+1
+NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
+for i in range (1, AMOUNT_OCT):
+    for j in range (0, 7):
+        NOTES.append(NOTES[j]+str(i))
+NOTES.append(NOTES[0]+str(i+1))
 
 FONT = "Arial 16"
 FIRST_COLOR = "#666666"

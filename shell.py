@@ -85,8 +85,20 @@ def dist_change():
     global tones
     tones = generator.generate_tones(DURATION_TONE)
 
+
 def metronome_switch():
     metronome.start_counter(scale_metronome)
+
+
+def record():
+    global record_on
+    if record_on == True:
+        btn_record.config(text="off")
+        record_on = False
+    else:
+        btn_record.config(text="record")
+        record_on = True
+
 
 def play_note_by_btn(note):
     stream.write(tones[NOTES.index(note)])
@@ -145,6 +157,12 @@ btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg
                               activebackground=SECOND_COLOR_PRESSED,
                               activeforeground="black", command=metronome_switch)
 btn_metronome_switch.place(relx=0.26, rely=0.1, relwidth=0.11, relheight=0.09)
+
+record_on = False
+btn_record = Button(window, text="off", font=FONT, bg=SECOND_COLOR, fg="black",
+                    activebackground=SECOND_COLOR_PRESSED,
+                    activeforeground="black", command=record)
+btn_record.place(relx=0.38, rely=0.9, relwidth=0.24, relheight=0.1)
 
 buttons = [0] * len(NOTES)
 offset = 0

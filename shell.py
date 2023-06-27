@@ -1,14 +1,13 @@
-import time
+import asyncio
 import wave
 from tkinter import *
 
-import pyaudio
-from winsound import Beep
-import asyncio
-import pyaudio as pa
 import numpy as np
+import pyaudio
+import pyaudio as pa
 
-import Samples, Metrognome
+import Metrognome
+import Samples
 
 DURATION_TONE = 1 / 64.0
 # частота дискретизации

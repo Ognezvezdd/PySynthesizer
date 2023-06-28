@@ -1,4 +1,5 @@
-import threading, time
+import threading
+import time
 
 
 class Worker(threading.Thread):
@@ -11,10 +12,22 @@ class Worker(threading.Thread):
         self.flag = False
         self.active = True
 
+    def graph(self):
+        pass
+
+    def record(self):
+        pass
+
     def run(self):
+        print(f"Началось выполнение {self.num_thread} задачи")
         while self.active:
             if self.flag:
-                print("YES")
+
+                if self.num_thread == 1:
+                    self.graph()
+                elif self.num_thread == 2:
+                    self.record()
+
                 self.flag = False
             else:
                 time.sleep(0.1)

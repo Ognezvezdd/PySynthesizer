@@ -1,15 +1,14 @@
-import asyncio
+import os
 import time
 import wave
-from playsound import playsound
 from tkinter import *
 
-import os
 import numpy as np
 import pyaudio as pa
+from playsound import playsound
 
 import Metrognome
-import Samples
+import Samples, Worker
 
 DURATION_TONE = 1 / 64.0
 # частота дискретизации
@@ -27,8 +26,9 @@ GENERATION_TYPES = ["sinus"] * AMOUNT_PIANOS
 GENERATIONS_TYPES = ["sinus", "saw", 'guitar']
 EFFECTS = {'distortion': 1}
 
-BIND_KEYS = [["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"], ["z", "s", "x", "d", "c", "v", "j", "m", "k", "comma", "l", "period", "slash"]]
-AMOUNT_OCT = 1
+BIND_KEYS = [["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"],
+             ["z", "s", "x", "d", "c", "v", "j", "m", "k", "comma", "l", "period", "slash"]]
+AMOUNT_OCT = 2
 WHITE_NOTES = AMOUNT_OCT * 7 + 1
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
 oct_num = 1
@@ -51,7 +51,7 @@ pressed_keys = set()
 def keydown(event):
     global pressed_keys
     pressed_keys.add(event.keysym)
-    for now_piano_num in range (0, AMOUNT_PIANOS):
+    for now_piano_num in range(0, AMOUNT_PIANOS):
         try:
             index = BIND_KEYS[now_piano_num].index(event.keysym)
             if len(NOTES[index]) >= 2 and NOTES[index][1] == "b":
@@ -134,13 +134,16 @@ def start_record():
 
 def record():
     global record_on
+    global now_playing_sound_and_recording
     if record_on:
         btn_record.config(text="not rec")
         record_on = False
+        now_playing_sound_and_recording = False
         stop_record()
     else:
         btn_record.config(text="recording")
         record_on = True
+        now_playing_sound_and_recording = False
         start_record()
 
 
@@ -164,13 +167,14 @@ def play_note_by_key():
     sound = np.array(sound, dtype=np.int32)
     maximum = 100000000
     for _key in pressed_keys:
-        for now_piano_num in range(0, AMOUNT_PIANOS):
-            try:
-                index = BIND_KEYS[now_piano_num].index(_key)
-                maximum = min(maximum, max(GENERATORS[piano_num].tones[index]))
-                sound = list(map(lambda x, y: x + y, sound, GENERATORS[piano_num].tones[index]))
-            except ValueError:
-                pass
+        piano_num = [i for i in range(0, AMOUNT_PIANOS) if _key in BIND_KEYS[i]][0]
+        print(piano_num)
+        try:
+            index = BIND_KEYS[piano_num].index(_key)
+            maximum = min(maximum, max(GENERATORS[piano_num].tones[index]))
+            sound = list(map(lambda x, y: x + y, sound, GENERATORS[piano_num].tones[index]))
+        except ValueError:
+            pass
 
     sound = sound / max(sound) * maximum
     STREAMS[0].write(np.array(sound, dtype=np.int16))
@@ -265,6 +269,7 @@ for piano_num in range(0, AMOUNT_PIANOS):
     btns.append(buttons)
 
 record_on = False
+now_playing_sound_and_recording = False
 btn_record = Button(window, text="not rec", font=FONT, bg=SECOND_COLOR, fg="black",
                     activebackground=SECOND_COLOR_PRESSED,
                     activeforeground="black", command=record)
@@ -285,6 +290,10 @@ btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg
 btn_metronome_switch.place(relx=0.51, rely=0.9, relwidth=0.23, relheight=0.09)
 
 # Генерируем тона с заданной длительностью
+
+worker = Worker.Worker(10)
+worker.start()
+worker.flag = True
 
 GENERATORS = []
 for piano in range(AMOUNT_PIANOS):
@@ -313,3 +322,5 @@ window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)
 
 window.mainloop()
+
+worker.active = False

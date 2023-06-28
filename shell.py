@@ -20,6 +20,7 @@ S_16BIT = 2 ** 16
 AMOUNT_PIANOS = 2
 
 OCT_NUMBERS = [3] * AMOUNT_PIANOS
+
 OCTAVES = ["contr", "greate", "small", "first", "second", "third", "fourth"]
 
 GENERATION_TYPES = ["sinus"] * AMOUNT_PIANOS
@@ -153,14 +154,14 @@ def record_play():
     playsound(os.path.abspath(last), block=True)
 
 
-def play_note_by_btn(note, piano):
-    stream.write(tones[NOTES.index(note)])
+def play_note_by_btn(note, piano=0):
+    STREAMS[piano].write(tones[NOTES.index(note)])
     print(note)
     if record_on:
         frames.append(tones[NOTES.index(note)])
 
 
-async def play_note_by_key():
+async def play_note_by_key(piano=0):
     sound = [0] * len(tones[0])
     sound = np.array(sound, dtype=np.int32)
     maximum = 100000000
@@ -173,10 +174,10 @@ async def play_note_by_key():
             pass
 
     sound = sound / max(sound) * maximum
-    stream.write(np.array(sound, dtype=np.int16))
+    STREAMS[piano].write(np.array(sound, dtype=np.int16))
     if record_on:
         frames.append(np.array(sound, dtype=np.int16))
-        print(len(stream.read(BUFFER)))
+        print(len(STREAMS[piano].read(BUFFER)))
 
 
 window = Tk()
@@ -297,10 +298,12 @@ py_audio = pa.PyAudio()
 # Создаём поток для вывода
 print(py_audio.get_default_output_device_info())
 BUFFER = 1024 * 8 * 3
-
+STREAMS = []
 # print(py_audio.is_format_supported(rate='both'))
-stream = py_audio.open(format=py_audio.get_format_from_width(width=2),
-                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER)
+for i in range(AMOUNT_PIANOS):
+    s = py_audio.open(format=py_audio.get_format_from_width(width=2),
+                           channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER)
+    STREAMS.append(s)
 
 window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)

@@ -1,2 +1,0 @@
-def snake():
-    pass

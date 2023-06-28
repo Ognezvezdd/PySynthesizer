@@ -9,7 +9,7 @@ class Generator:
 
     def __init__(self, DURATION_TONE: float, S_16BIT: int, SAMPLE_RATE: int, GENERATION_TYPES: list,
                  GENERATION_TYPE: str, EFFECTS: dict,
-                 OCT_NUMBER: int, AMOUNT_OCT: int, USED_GRAPHS: bool = False, worker: Worker.Worker = None):
+                 OCT_NUMBER: int, AMOUNT_OCT: int, USED_GRAPHS: bool = False):
         self.DURATION_TONE = DURATION_TONE
         self.tones = []
         self.OCT_NUMBER = OCT_NUMBER
@@ -21,7 +21,10 @@ class Generator:
         self.USED_GRAPHS = USED_GRAPHS
         self.AMOUNT_OCT = AMOUNT_OCT
         self.graph_list = []
-        self.worker = worker
+
+    def get_graph(self, worker: Worker.Worker):
+        worker.graph_list = self.graph_list
+        worker.run_task = True
 
     def generate_sample(self, freq, duration, volume):
         # амплитуда

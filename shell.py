@@ -10,8 +10,6 @@ from playsound import playsound
 import Metrognome
 import Samples, Worker
 
-from SNAKE import snake
-
 DURATION_TONE = 1 / 64.0
 # частота дискретизации
 SAMPLE_RATE = 44100
@@ -88,6 +86,10 @@ def oct_change(side, piano_num):
     GENERATORS[piano_num].OCT_NUMBER = OCT_NUMBERS[piano_num]
     GENERATORS[piano_num].generate_tones(DURATION_TONE)
 
+    global worker
+    GENERATORS[piano_num].get_graph(worker)
+    print(worker.run_task)
+
 
 def gen_change(piano_num):
     global GENERATION_TYPES
@@ -98,9 +100,17 @@ def gen_change(piano_num):
     GENERATORS[piano_num].GENERATION_TYPE = GENERATION_TYPES[piano_num]
     GENERATORS[piano_num].generate_tones(DURATION_TONE)
 
+    global worker
+    GENERATORS[piano_num].get_graph(worker)
+    print(worker.run_task)
+
 
 def dist_change(piano_num):
     GENERATORS[piano_num].config_duration(str(scales_dist[piano_num].get()))
+
+    global worker
+    GENERATORS[piano_num].get_graph(worker)
+    print(worker.run_task)
 
 
 def metronome_switch():
@@ -241,12 +251,6 @@ for piano_num in range(0, AMOUNT_PIANOS):
     btns_dist_change[piano_num].place(relx=0.63, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.1 / AMOUNT_PIANOS,
                                       relwidth=0.11, relheight=0.09 / AMOUNT_PIANOS)
 
-    btn_snake = Button(window, text="Snake", font=FONT, bg=SECOND_COLOR, fg="black",
-                        activebackground=SECOND_COLOR_PRESSED,
-                        activeforeground="black", command=snake)
-    btn_snake.place(relx=0.26, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.1 / AMOUNT_PIANOS,
-                                      relwidth=0.11, relheight=0.09 / AMOUNT_PIANOS)
-
     buttons = [0] * len(NOTES)
     offset = 0
     for note in NOTES:
@@ -299,15 +303,15 @@ btn_metronome_switch.place(relx=0.51, rely=0.9, relwidth=0.23, relheight=0.09)
 
 # Генерируем тона с заданной длительностью
 
-worker = Worker.Worker(10)
+worker = Worker.Worker(1)
 worker.start()
-worker.flag = True
+worker.run_task = True
 
 GENERATORS = []
 for piano in range(AMOUNT_PIANOS):
     gen = Samples.Generator(DURATION_TONE, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0], EFFECTS,
-                            OCT_NUMBERS[0],
-                            AMOUNT_OCT, False)
+                            OCT_NUMBERS[0], AMOUNT_OCT, False)
+
     GENERATORS.append(gen)
     GENERATORS[piano].generate_tones(DURATION_TONE)
     GENERATORS[piano].USED_GRAPHS = True
@@ -317,10 +321,10 @@ metronome = Metrognome.Metronome(root=window)
 # Инициализируем
 py_audio = pa.PyAudio()
 # Создаём поток для вывода
-print(py_audio.get_default_output_device_info())
 BUFFER = 1024 * 8 * 3
 STREAMS = []
-# print(py_audio.is_format_supported(rate='both'))
+
+# print(py_audio.get_default_output_device_info())
 for piano in range(AMOUNT_PIANOS):
     s = py_audio.open(format=py_audio.get_format_from_width(width=2),
                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER)

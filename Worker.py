@@ -17,11 +17,15 @@ class Worker(threading.Thread):
         super().__init__()
         # определяем аргументы собственного класса
         self.num_thread = num_thread
-        self.flag = False
+        self.graph_list = []
+        self.run_task = False
         self.active = True
 
     def graph(self):
         pass
+        # print("GRAPH!")
+        # plt.plot(self.graph_list)
+        # plt.title("")
 
     def record(self):
         pass
@@ -29,13 +33,12 @@ class Worker(threading.Thread):
     def run(self):
         print(f"Началось выполнение {self.num_thread} задачи")
         while self.active:
-            if self.flag:
-
-                if self.num_thread == WorkerThreadName.GRAPH:
+            if self.run_task:
+                if self.num_thread == WorkerThreadName.GRAPH.value:
                     self.graph()
-                elif self.num_thread == WorkerThreadName.RECORD:
+                elif self.num_thread == WorkerThreadName.RECORD.value:
                     self.record()
 
-                self.flag = False
+                self.run_task = False
             else:
                 time.sleep(0.1)

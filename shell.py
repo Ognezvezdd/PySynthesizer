@@ -27,8 +27,8 @@ GENERATION_TYPES = ["sinus"] * AMOUNT_PIANOS
 GENERATIONS_TYPES = ["sinus", "saw", 'guitar']
 EFFECTS = {'distortion': 1}
 
-BIND_KEYS = ["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"]
-AMOUNT_OCT = 2
+BIND_KEYS = [["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"], ["z", "s", "x", "d", "c", "v", "j", "m", "k", ",", "l", ".", "/"]]
+AMOUNT_OCT = 1
 WHITE_NOTES = AMOUNT_OCT * 7 + 1
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
 oct_num = 1
@@ -161,23 +161,24 @@ def play_note_by_btn(note, piano=0):
         frames.append(tones[NOTES.index(note)])
 
 
-async def play_note_by_key(piano=0):
+async def play_note_by_key():
     sound = [0] * len(tones[0])
     sound = np.array(sound, dtype=np.int32)
     maximum = 100000000
     for i in pressed_keys:
-        try:
-            index = BIND_KEYS.index(i)
-            maximum = min(maximum, max(tones[index]))
-            sound = list(map(lambda x, y: x + y, sound, tones[index]))
-        except ValueError:
-            pass
+        for piano_num in range (0, AMOUNT_PIANOS):
+            try:
+                index = BIND_KEYS[piano_num].index(i)
+                maximum = min(maximum, max(tones[index]))
+                sound = list(map(lambda x, y: x + y, sound, tones[index]))
+            except ValueError:
+                pass
 
     sound = sound / max(sound) * maximum
-    STREAMS[piano].write(np.array(sound, dtype=np.int16))
+    STREAMS[piano_num].write(np.array(sound, dtype=np.int16))
     if record_on:
         frames.append(np.array(sound, dtype=np.int16))
-        print(len(STREAMS[piano].read(BUFFER)))
+        print(len(STREAMS[piano_num].read(BUFFER)))
 
 
 window = Tk()

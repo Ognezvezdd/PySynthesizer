@@ -59,7 +59,7 @@ def keydown(event):
             buttons[index].config(bg="#DDDDDD", relief="sunken")
     except ValueError:
         pass
-    asyncio.run(play_note_by_key())
+    play_note_by_key()
 
 
 def keyup(event):
@@ -77,30 +77,28 @@ def keyup(event):
 
 
 def oct_change(side, piano_num):
+    print(f"i change {piano_num}")
     global OCT_NUMBERS
     OCT_NUMBERS[piano_num] = (OCT_NUMBERS[piano_num] + side) % (len(OCTAVES) - AMOUNT_OCT + 1)
     labels_octnumber[piano_num].config(text=f"{(OCTAVES[OCT_NUMBERS[piano_num]])}")
 
-    generator.OCT_NUMBER = OCT_NUMBERS[0]
-    global tones
-    tones = generator.generate_tones(DURATION_TONE)
+    GENERATORS[piano_num].OCT_NUMBER = OCT_NUMBERS[piano_num]
+    GENERATORS[piano_num].generate_tones(DURATION_TONE)
 
 
 def gen_change(piano_num):
+    print(f"i change {piano_num}")
     global GENERATION_TYPES
     GENERATION_TYPES[piano_num] = GENERATIONS_TYPES[
         (GENERATIONS_TYPES.index(GENERATION_TYPES[piano_num]) + 1) % len(GENERATIONS_TYPES)]
     btns_gen_change[piano_num].config(text=f"{GENERATION_TYPES[piano_num]}")
 
-    generator.GENERATION_TYPE = GENERATION_TYPES[0]
-    global tones
-    tones = generator.generate_tones(DURATION_TONE)
+    GENERATORS[piano_num].GENERATION_TYPE = GENERATION_TYPES[piano_num]
+    GENERATORS[piano_num].generate_tones(DURATION_TONE)
 
 
 def dist_change(piano_num):
-    generator.config_duration(str(scales_dist[piano_num].get()))
-    global tones
-    tones = generator.generate_tones(DURATION_TONE)
+    GENERATORS[piano_num].config_duration(str(scales_dist[piano_num].get()))
 
 
 def metronome_switch():
@@ -148,28 +146,28 @@ def record():
 
 def record_play():
     directory = 'Records'
-    last = max([os.path .join(directory, filename) for filename in os.listdir(directory)], key=os.path.getctime)
+    last = max([os.path.join(directory, filename) for filename in os.listdir(directory)], key=os.path.getctime)
     last = last.replace('\\', '/')
     print(f"I play: {last}")
     playsound(os.path.abspath(last), block=True)
 
 
-def play_note_by_btn(note, piano=0):
-    STREAMS[piano].write(tones[NOTES.index(note)])
+def play_note_by_btn(note, piano_num):
+    STREAMS[piano].write(GENERATORS[piano_num].tones[NOTES.index(note)])
     print(note)
     if record_on:
-        frames.append(tones[NOTES.index(note)])
+        frames.append(GENERATORS[piano_num].tones[NOTES.index(note)])
 
 
-async def play_note_by_key(piano=0):
-    sound = [0] * len(tones[0])
+async def play_note_by_key(piano_num):
+    sound = [0] * len(GENERATORS[piano_num].tones[0])
     sound = np.array(sound, dtype=np.int32)
     maximum = 100000000
     for i in pressed_keys:
         try:
             index = BIND_KEYS.index(i)
-            maximum = min(maximum, max(tones[index]))
-            sound = list(map(lambda x, y: x + y, sound, tones[index]))
+            maximum = min(maximum, max(GENERATORS[piano_num].tones[index]))
+            sound = list(map(lambda x, y: x + y, sound, GENERATORS[piano_num].tones[index]))
         except ValueError:
             pass
 
@@ -286,10 +284,15 @@ btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg
 btn_metronome_switch.place(relx=0.51, rely=0.9, relwidth=0.23, relheight=0.09)
 
 # Генерируем тона с заданной длительностью
-generator = Samples.Generator(S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0], EFFECTS, OCT_NUMBERS[0],
-                              AMOUNT_OCT, False)
-tones = generator.generate_tones(DURATION_TONE)
-generator.USED_GRAPHS = False
+
+GENERATORS = []
+for piano in range(AMOUNT_PIANOS):
+    gen = Samples.Generator(DURATION_TONE, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0], EFFECTS,
+                            OCT_NUMBERS[0],
+                            AMOUNT_OCT, False)
+    GENERATORS.append(gen)
+    GENERATORS[piano].generate_tones(DURATION_TONE)
+    GENERATORS[piano].USED_GRAPHS = False
 
 metronome = Metrognome.Metronome(root=window)
 
@@ -300,9 +303,9 @@ print(py_audio.get_default_output_device_info())
 BUFFER = 1024 * 8 * 3
 STREAMS = []
 # print(py_audio.is_format_supported(rate='both'))
-for i in range(AMOUNT_PIANOS):
+for piano in range(AMOUNT_PIANOS):
     s = py_audio.open(format=py_audio.get_format_from_width(width=2),
-                           channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER)
+                      channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER)
     STREAMS.append(s)
 
 window.bind("<KeyPress>", keydown)

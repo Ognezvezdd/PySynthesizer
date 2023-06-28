@@ -6,8 +6,11 @@ import guitar
 
 class Generator:
 
-    def __init__(self, S_16BIT: int, SAMPLE_RATE: int, GENERATION_TYPES: list, GENERATION_TYPE: str, EFFECTS: dict,
+    def __init__(self, DURATION_TONE: float, S_16BIT: int, SAMPLE_RATE: int, GENERATION_TYPES: list,
+                 GENERATION_TYPE: str, EFFECTS: dict,
                  OCT_NUMBER: int, AMOUNT_OCT: int, USED_GRAPHS: bool = False):
+        self.DURATION_TONE = DURATION_TONE
+        self.tones = []
         self.OCT_NUMBER = OCT_NUMBER
         self.S_16BIT = S_16BIT
         self.SAMPLE_RATE = SAMPLE_RATE
@@ -67,7 +70,8 @@ class Generator:
                 plt.plot(tone[0:1000])
         if self.USED_GRAPHS:
             plt.show()
-        return tones
+        self.tones = tones
+        # return tones
 
     def config_duration(self, string):
         if not string.replace('.', '').isdigit():
@@ -84,3 +88,4 @@ class Generator:
             return
         self.EFFECTS['distortion'] = num
         print(f"distortion: {self.EFFECTS['distortion']}")
+        self.generate_tones(self.DURATION_TONE)

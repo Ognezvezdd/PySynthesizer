@@ -157,24 +157,24 @@ def play_note_by_btn(note, piano_num):
         frames.append(GENERATORS[piano_num].tones[NOTES.index(note)])
 
 
-async def play_note_by_key():
-    sound = [0] * len(tones[0])
+def play_note_by_key():
+    sound = [0] * len(GENERATORS[0].tones[0])
     sound = np.array(sound, dtype=np.int32)
     maximum = 100000000
-    for i in pressed_keys:
-        for piano_num in range (0, AMOUNT_PIANOS):
+    for _key in pressed_keys:
+        for now_piano_num in range(0, AMOUNT_PIANOS):
             try:
-                index = BIND_KEYS[piano_num].index(i)
-                maximum = min(maximum, max(tones[index]))
-                sound = list(map(lambda x, y: x + y, sound, tones[index]))
+                index = BIND_KEYS[now_piano_num].index(_key)
+                maximum = min(maximum, max(GENERATORS[piano_num].tones[index]))
+                sound = list(map(lambda x, y: x + y, sound, GENERATORS[piano_num].tones[index]))
             except ValueError:
                 pass
 
     sound = sound / max(sound) * maximum
-    STREAMS[piano_num].write(np.array(sound, dtype=np.int16))
+    STREAMS[0].write(np.array(sound, dtype=np.int16))
     if record_on:
         frames.append(np.array(sound, dtype=np.int16))
-        print(len(STREAMS[piano_num].read(BUFFER)))
+        print(len(STREAMS[0].read(BUFFER)))
 
 
 window = Tk()

@@ -237,6 +237,10 @@ for piano_num in range(0, AMOUNT_PIANOS):
     btns_dist_change[piano_num].place(relx=0.63, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.1 / AMOUNT_PIANOS,
                                       relwidth=0.11, relheight=0.09 / AMOUNT_PIANOS)
 
+    btn_snake = Button(window, text="Snake", font=FONT, bg=SECOND_COLOR, fg="black",
+                        activebackground=SECOND_COLOR_PRESSED,
+                        activeforeground="black", command=snake)
+
     buttons = [0] * len(NOTES)
     offset = 0
     for note in NOTES:

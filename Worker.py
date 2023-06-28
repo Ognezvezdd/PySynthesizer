@@ -1,5 +1,13 @@
 import threading
 import time
+import matplotlib.pyplot as plt
+
+from enum import Enum
+
+
+class WorkerThreadName(Enum):
+    GRAPH = 1
+    RECORD = 2
 
 
 class Worker(threading.Thread):
@@ -23,9 +31,9 @@ class Worker(threading.Thread):
         while self.active:
             if self.flag:
 
-                if self.num_thread == 1:
+                if self.num_thread == WorkerThreadName.GRAPH:
                     self.graph()
-                elif self.num_thread == 2:
+                elif self.num_thread == WorkerThreadName.RECORD:
                     self.record()
 
                 self.flag = False

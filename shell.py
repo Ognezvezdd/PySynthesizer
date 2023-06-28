@@ -302,7 +302,7 @@ for piano in range(AMOUNT_PIANOS):
                             AMOUNT_OCT, False)
     GENERATORS.append(gen)
     GENERATORS[piano].generate_tones(DURATION_TONE)
-    GENERATORS[piano].USED_GRAPHS = False
+    GENERATORS[piano].USED_GRAPHS = True
 
 metronome = Metrognome.Metronome(root=window)
 

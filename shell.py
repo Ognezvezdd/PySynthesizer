@@ -10,6 +10,8 @@ from playsound import playsound
 import Metrognome
 import Samples, Worker
 
+from SNAKE import snake
+
 DURATION_TONE = 1 / 64.0
 # частота дискретизации
 SAMPLE_RATE = 44100
@@ -242,6 +244,8 @@ for piano_num in range(0, AMOUNT_PIANOS):
     btn_snake = Button(window, text="Snake", font=FONT, bg=SECOND_COLOR, fg="black",
                         activebackground=SECOND_COLOR_PRESSED,
                         activeforeground="black", command=snake)
+    btn_snake.place(relx=0.26, rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.1 / AMOUNT_PIANOS,
+                                      relwidth=0.11, relheight=0.09 / AMOUNT_PIANOS)
 
     buttons = [0] * len(NOTES)
     offset = 0

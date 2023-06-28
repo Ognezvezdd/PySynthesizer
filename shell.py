@@ -1,6 +1,7 @@
 import asyncio
 import time
 import wave
+from playsound import playsound
 from tkinter import *
 
 import os
@@ -16,7 +17,7 @@ SAMPLE_RATE = 44100
 # 16-ти битный звук (2 ** 16 -- максимальное значение для int16)
 S_16BIT = 2 ** 16
 
-AMOUNT_PIANOS = 3
+AMOUNT_PIANOS = 2
 
 OCT_NUMBERS = [3] * AMOUNT_PIANOS
 OCTAVES = ["contr", "greate", "small", "first", "second", "third", "fourth"]
@@ -26,7 +27,7 @@ GENERATIONS_TYPES = ["sinus", "saw", 'guitar']
 EFFECTS = {'distortion': 1}
 
 BIND_KEYS = ["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"]
-AMOUNT_OCT = 3
+AMOUNT_OCT = 2
 WHITE_NOTES = AMOUNT_OCT * 7 + 1
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
 oct_num = 1
@@ -145,10 +146,14 @@ def record():
 
 
 def record_play():
-    pass
+    directory = 'Records'
+    last = max([os.path .join(directory, filename) for filename in os.listdir(directory)], key=os.path.getctime)
+    last = last.replace('\\', '/')
+    print(f"I play: {last}")
+    playsound(os.path.abspath(last), block=True)
 
 
-def play_note_by_btn(note):
+def play_note_by_btn(note, piano):
     stream.write(tones[NOTES.index(note)])
     print(note)
     if record_on:
@@ -236,7 +241,7 @@ for piano_num in range(0, AMOUNT_PIANOS):
         if len(note) == 1 or (len(note) >= 2 and note[1] != "b"):
             buttons[NOTES.index(note)] = Button(window, text=note, font=FONT, bg="white", fg="black",
                                                 activebackground="#DDDDDD", activeforeground="black",
-                                                command=lambda arg=note: play_note_by_btn(arg))
+                                                command=lambda arg=note, arg2=piano_num: play_note_by_btn(arg, arg2))
             buttons[NOTES.index(note)].place(relx=0 + offset * (1 / WHITE_NOTES),
                                              rely=(0.9 / AMOUNT_PIANOS) * piano_num + 0.2 / AMOUNT_PIANOS,
                                              relwidth=1 / WHITE_NOTES, relheight=0.69 / AMOUNT_PIANOS)
@@ -246,7 +251,7 @@ for piano_num in range(0, AMOUNT_PIANOS):
         if len(note) >= 2 and note[1] == "b":
             buttons[NOTES.index(note)] = Button(window, text=note, font=FONT, bg="black", fg="white",
                                                 activebackground="#444444", activeforeground="white",
-                                                command=lambda arg=note: play_note_by_btn(arg))
+                                                command=lambda arg=note, arg2=piano_num: play_note_by_btn(arg, arg2))
 
             if offset % 7 == 2:
                 offset += 1

@@ -143,6 +143,7 @@ def record():
         record_on = True
         start_record()
 
+
 def record_play():
     pass
 
@@ -264,8 +265,8 @@ btn_record = Button(window, text="not rec", font=FONT, bg=SECOND_COLOR, fg="blac
                     activeforeground="black", command=record)
 btn_record.place(relx=0.75, rely=0.9, relwidth=0.115, relheight=0.09)
 btn_record_play = Button(window, text="play", font=FONT, bg=SECOND_COLOR, fg="black",
-                    activebackground=SECOND_COLOR_PRESSED,
-                    activeforeground="black", command=record_play)
+                         activebackground=SECOND_COLOR_PRESSED,
+                         activeforeground="black", command=record_play)
 btn_record_play.place(relx=0.875, rely=0.9, relwidth=0.115, relheight=0.09)
 
 metronome_on = False

@@ -27,7 +27,7 @@ GENERATION_TYPES = ["sinus"] * AMOUNT_PIANOS
 GENERATIONS_TYPES = ["sinus", "saw", 'guitar']
 EFFECTS = {'distortion': 1}
 
-BIND_KEYS = [["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"], ["z", "s", "x", "d", "c", "v", "j", "m", "k", ",", "l", ".", "/"]]
+BIND_KEYS = [["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"], ["z", "s", "x", "d", "c", "v", "j", "m", "k", "comma", "l", "period", "slash"]]
 AMOUNT_OCT = 1
 WHITE_NOTES = AMOUNT_OCT * 7 + 1
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
@@ -51,14 +51,15 @@ pressed_keys = set()
 def keydown(event):
     global pressed_keys
     pressed_keys.add(event.keysym)
-    try:
-        index = BIND_KEYS.index(event.keysym)
-        if len(NOTES[index]) >= 2 and NOTES[index][1] == "b":
-            buttons[index].config(bg="#444444", relief="sunken")
-        else:
-            buttons[index].config(bg="#DDDDDD", relief="sunken")
-    except ValueError:
-        pass
+    for now_piano_num in range (0, AMOUNT_PIANOS):
+        try:
+            index = BIND_KEYS[now_piano_num].index(event.keysym)
+            if len(NOTES[index]) >= 2 and NOTES[index][1] == "b":
+                btns[now_piano_num][index].config(bg="#444444", relief="sunken")
+            else:
+                btns[now_piano_num][index].config(bg="#DDDDDD", relief="sunken")
+        except ValueError:
+            pass
     play_note_by_key()
 
 
@@ -66,14 +67,15 @@ def keyup(event):
     global pressed_keys
     pressed_keys.discard(event.keysym)
     print(event.keysym)
-    try:
-        index = BIND_KEYS.index(event.keysym)
-        if len(NOTES[index]) >= 2 and NOTES[index][1] == "b":
-            buttons[index].config(bg="black", relief="raised")
-        else:
-            buttons[index].config(bg="white", relief="raised")
-    except ValueError:
-        pass
+    for now_piano_num in range(0, AMOUNT_PIANOS):
+        try:
+            index = BIND_KEYS[now_piano_num].index(event.keysym)
+            if len(NOTES[index]) >= 2 and NOTES[index][1] == "b":
+                btns[now_piano_num][index].config(bg="black", relief="raised")
+            else:
+                btns[now_piano_num][index].config(bg="white", relief="raised")
+        except ValueError:
+            pass
 
 
 def oct_change(side, piano_num):

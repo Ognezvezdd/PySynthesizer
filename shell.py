@@ -5,7 +5,6 @@ from tkinter import *
 import numpy as np
 import pyaudio as pa
 from playsound import playsound
-# BOB
 import Metrognome
 import Samples
 import Worker
@@ -20,6 +19,8 @@ except EXCEPTION as es:
 NOTES.append(NOTES[0] + str(oct_num + 1))
 
 pressed_keys = set()
+
+
 
 
 def keydown(event):
@@ -55,7 +56,6 @@ def keyup(event):
 
 
 def oct_change(side, piano_num):
-    global OCT_NUMBERS
     OCT_NUMBERS[piano_num] = (OCT_NUMBERS[piano_num] + side) % (len(OCTAVES) - AMOUNT_OCT + 1)
     labels_octnumber[piano_num].config(text=f"{(OCTAVES[OCT_NUMBERS[piano_num]])}")
 
@@ -279,7 +279,8 @@ worker.run_task = True
 
 GENERATORS = []
 for piano in range(AMOUNT_PIANOS):
-    gen = Samples.Generator(DURATION_TONE, DURATION, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0], EFFECTS,
+    gen = Samples.Generator(DURATION_TONE, DURATION, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0],
+                            EFFECTS,
                             OCT_NUMBERS[0], AMOUNT_OCT, False)
 
     GENERATORS.append(gen)

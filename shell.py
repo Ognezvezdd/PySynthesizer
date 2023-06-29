@@ -5,7 +5,7 @@ from tkinter import *
 import numpy as np
 import pyaudio as pa
 from playsound import playsound
-#BOB
+# BOB
 import Metrognome
 import Samples
 import Worker
@@ -18,11 +18,6 @@ try:
 except EXCEPTION as es:
     print(es)
 NOTES.append(NOTES[0] + str(oct_num + 1))
-
-FONT = "Arial 16"
-FIRST_COLOR = "#666666"
-SECOND_COLOR = "#BB0000"
-SECOND_COLOR_PRESSED = "#990000"
 
 pressed_keys = set()
 
@@ -65,7 +60,7 @@ def oct_change(side, piano_num):
     labels_octnumber[piano_num].config(text=f"{(OCTAVES[OCT_NUMBERS[piano_num]])}")
 
     GENERATORS[piano_num].OCT_NUMBER = OCT_NUMBERS[piano_num]
-    GENERATORS[piano_num].generate_tones(DURATION_TONE)
+    GENERATORS[piano_num].generate_tones()
 
 
 def gen_change(piano_num):
@@ -75,7 +70,7 @@ def gen_change(piano_num):
     btns_gen_change[piano_num].config(text=f"{GENERATION_TYPES[piano_num]}")
 
     GENERATORS[piano_num].GENERATION_TYPE = GENERATION_TYPES[piano_num]
-    GENERATORS[piano_num].generate_tones(DURATION_TONE)
+    GENERATORS[piano_num].generate_tones()
 
 
 def dist_change(piano_num):
@@ -284,11 +279,11 @@ worker.run_task = True
 
 GENERATORS = []
 for piano in range(AMOUNT_PIANOS):
-    gen = Samples.Generator(DURATION_TONE, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0], EFFECTS,
+    gen = Samples.Generator(DURATION_TONE, DURATION, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0], EFFECTS,
                             OCT_NUMBERS[0], AMOUNT_OCT, False)
 
     GENERATORS.append(gen)
-    GENERATORS[piano].generate_tones(DURATION)
+    GENERATORS[piano].generate_tones()
     GENERATORS[piano].USED_GRAPHS = False
 
 metronome = Metrognome.Metronome(root=window)

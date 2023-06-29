@@ -291,7 +291,7 @@ btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg
                               activeforeground="black", command=metronome_switch)
 btn_metronome_switch.place(relx=0.51, rely=0.9, relwidth=0.23, relheight=0.09)
 
-# Генерируем тона с заданной длительностью
+#Генерируем тона с заданной длительностью
 
 worker = Worker.Worker(1)
 worker.start()

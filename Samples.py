@@ -29,7 +29,7 @@ class Generator:
         # частоте дискретизации (пересчитанная)
         w = 2.0 * np.pi * freq / self.SAMPLE_RATE
         # массив сэмплов
-        k = np.arange(0, self.SAMPLE_RATE)
+        k = np.arange(0, self.SAMPLE_RATE * duration)
         T = 1 / freq
         # массив значений функции (с округлением)
 

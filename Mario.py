@@ -10,16 +10,16 @@ py_audio = pa.PyAudio()
 
 GENERATORS = []
 
-gen = Samples.Generator(DURATION_TONE, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0], EFFECTS,
-                        OCT_NUMBERS[0], AMOUNT_OCT, False)
+gen = Samples.Generator(DURATION_TONE, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, "saw", EFFECTS,
+                        3, AMOUNT_OCT, False)
 GENERATORS.append(gen)
-GENERATORS[0].generate_tones(44100)
+GENERATORS[0].generate_tones(0.75)
 GENERATORS[0].USED_GRAPHS = False
 
-gen = Samples.Generator(DURATION_TONE, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0], EFFECTS,
-                        OCT_NUMBERS[0] - 2, AMOUNT_OCT, False)
+gen = Samples.Generator(DURATION_TONE, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, "saw", EFFECTS,
+                        1, AMOUNT_OCT, False)
 GENERATORS.append(gen)
-GENERATORS[1].generate_tones(44100)
+GENERATORS[1].generate_tones(0.75)
 GENERATORS[1].USED_GRAPHS = False
 
 frames = []
@@ -45,7 +45,7 @@ def mario():
     accord([[0, 16], [1, 14]])
 
     accord([[0, 19], [1, 19]])
-    frames.append(GENERATORS[1].tones[7])
+    accord([[1, 7]])
 
     accord([[0, 12], [1, 12]])
     accord([[0, 7], [1, 12]])

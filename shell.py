@@ -5,7 +5,7 @@ from tkinter import *
 import numpy as np
 import pyaudio as pa
 from playsound import playsound
-
+#BOB
 import Metrognome
 import Samples
 import Worker
@@ -288,7 +288,7 @@ for piano in range(AMOUNT_PIANOS):
                             OCT_NUMBERS[0], AMOUNT_OCT, False)
 
     GENERATORS.append(gen)
-    GENERATORS[piano].generate_tones(DURATION_TONE)
+    GENERATORS[piano].generate_tones(DURATION)
     GENERATORS[piano].USED_GRAPHS = False
 
 metronome = Metrognome.Metronome(root=window)
@@ -297,7 +297,7 @@ metronome = Metrognome.Metronome(root=window)
 py_audio = pa.PyAudio()
 # Создаём поток для вывода
 # BUFFER = 1024 * 8 * 3
-BUFFER = SAMPLE_RATE
+BUFFER = int(SAMPLE_RATE * DURATION)
 STREAMS = []
 
 # print(py_audio.get_default_output_device_info())

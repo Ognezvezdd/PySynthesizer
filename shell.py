@@ -1,5 +1,6 @@
 import os
 import time
+import tkinter
 import wave
 from tkinter import *
 import numpy as np
@@ -8,6 +9,7 @@ from playsound import playsound
 import Metrognome
 import Samples
 import Worker
+import Melodis
 from constants import *
 
 try:
@@ -21,12 +23,26 @@ NOTES.append(NOTES[0] + str(oct_num + 1))
 pressed_keys = set()
 
 
+def play_sound_mario():
+    def play():
+        event = tkinter.Event
+        event.keysym = 'q'
+        for i in Melodis.Melodis.mario_list:
+            pass
+        keydown(event)
+        keyup(event)
+
+    play()
 
 
-def keydown(event):
+def keydown(event, is_used=True):
+    if 'F1' == event.keysym:
+        play_sound_mario()
+        return
     worker.btn_is_up = False
     global pressed_keys
     pressed_keys.add(event.keysym)
+    print(event.keysym)
     for now_piano_num in range(0, AMOUNT_PIANOS):
         try:
             index = BIND_KEYS[now_piano_num].index(event.keysym)
@@ -36,14 +52,15 @@ def keydown(event):
                 btns[now_piano_num][index].config(bg="#DDDDDD", relief="sunken")
         except ValueError:
             pass
-    play_note_by_key()
+    if is_used:
+        play_note_by_key()
 
 
 def keyup(event):
     worker.btn_is_up = True
     global pressed_keys
     pressed_keys.discard(event.keysym)
-    print(event.keysym)
+
     for now_piano_num in range(0, AMOUNT_PIANOS):
         try:
             index = BIND_KEYS[now_piano_num].index(event.keysym)

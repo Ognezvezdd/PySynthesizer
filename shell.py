@@ -143,7 +143,6 @@ def play_note_by_btn(note, piano_num):
     STREAMS[piano].write(GENERATORS[piano_num].tones[NOTES.index(note)])
     print(note)
     if record_on:
-        frames.append(worker.update_frame())
         frames.append(GENERATORS[piano_num].tones[NOTES.index(note)])
 
 
@@ -307,9 +306,6 @@ for piano in range(AMOUNT_PIANOS):
     s = py_audio.open(format=py_audio.get_format_from_width(width=2),
                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER)
     STREAMS.append(s)
-
-from Mario import mario
-mario(GENERATORS)
 
 
 window.bind("<KeyPress>", keydown)

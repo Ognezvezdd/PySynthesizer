@@ -156,7 +156,6 @@ def play_note_by_key():
                 piano_num = [i for i in range(0, AMOUNT_PIANOS) if _key in BIND_KEYS[i]][0]
             else:
                 piano_num = 0
-            print(piano_num)
             index = BIND_KEYS[piano_num].index(_key)
             maximum = min(maximum, max(GENERATORS[piano_num].tones[index]))
             sound = list(map(lambda x, y: x + y, sound, GENERATORS[piano_num].tones[index]))
@@ -306,7 +305,6 @@ for piano in range(AMOUNT_PIANOS):
     s = py_audio.open(format=py_audio.get_format_from_width(width=2),
                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER)
     STREAMS.append(s)
-
 
 window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)

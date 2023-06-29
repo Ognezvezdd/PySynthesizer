@@ -299,6 +299,10 @@ for piano in range(AMOUNT_PIANOS):
                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER)
     STREAMS.append(s)
 
+#from Mario import mario
+#mario(GENERATORS)
+
+
 window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)
 

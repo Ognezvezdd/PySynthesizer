@@ -86,10 +86,6 @@ def oct_change(side, piano_num):
     GENERATORS[piano_num].OCT_NUMBER = OCT_NUMBERS[piano_num]
     GENERATORS[piano_num].generate_tones(DURATION_TONE)
 
-    global worker
-    GENERATORS[piano_num].get_graph(worker)
-    print(worker.run_task)
-
 
 def gen_change(piano_num):
     global GENERATION_TYPES
@@ -100,17 +96,9 @@ def gen_change(piano_num):
     GENERATORS[piano_num].GENERATION_TYPE = GENERATION_TYPES[piano_num]
     GENERATORS[piano_num].generate_tones(DURATION_TONE)
 
-    global worker
-    GENERATORS[piano_num].get_graph(worker)
-    print(worker.run_task)
-
 
 def dist_change(piano_num):
     GENERATORS[piano_num].config_duration(str(scales_dist[piano_num].get()))
-
-    global worker
-    GENERATORS[piano_num].get_graph(worker)
-    print(worker.run_task)
 
 
 def metronome_switch():
@@ -321,7 +309,8 @@ metronome = Metrognome.Metronome(root=window)
 # Инициализируем
 py_audio = pa.PyAudio()
 # Создаём поток для вывода
-BUFFER = 1024 * 8 * 3
+# BUFFER = 1024 * 8 * 3
+BUFFER = SAMPLE_RATE
 STREAMS = []
 
 # print(py_audio.get_default_output_device_info())

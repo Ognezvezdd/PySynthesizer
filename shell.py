@@ -8,30 +8,10 @@ import pyaudio as pa
 from playsound import playsound
 
 import Metrognome
-import Samples, Worker
+import Samples
+import Worker
+from constants import *
 
-DURATION_TONE = 1 / 64.0
-# частота дискретизации
-SAMPLE_RATE = 44100
-# 16-ти битный звук (2 ** 16 -- максимальное значение для int16)
-S_16BIT = 2 ** 16
-
-AMOUNT_PIANOS = 2
-
-OCT_NUMBERS = [3] * AMOUNT_PIANOS
-
-OCTAVES = ["contr", "greate", "small", "first", "second", "third", "fourth"]
-
-GENERATION_TYPES = ["sinus"] * AMOUNT_PIANOS
-GENERATIONS_TYPES = ["sinus", "saw", 'guitar']
-EFFECTS = {'distortion': 1}
-
-BIND_KEYS = [["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"],
-             ["z", "s", "x", "d", "c", "v", "j", "m", "k", "comma", "l", "period", "slash"]]
-AMOUNT_OCT = 2
-WHITE_NOTES = AMOUNT_OCT * 7 + 1
-NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
-oct_num = 1
 try:
     for piano_num in range(1, AMOUNT_OCT):
         for j in range(0, 12):
@@ -291,7 +271,7 @@ btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg
                               activeforeground="black", command=metronome_switch)
 btn_metronome_switch.place(relx=0.51, rely=0.9, relwidth=0.23, relheight=0.09)
 
-#Генерируем тона с заданной длительностью
+# Генерируем тона с заданной длительностью
 
 worker = Worker.Worker(1)
 worker.start()

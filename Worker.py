@@ -23,7 +23,7 @@ class Worker(threading.Thread):
         pass
 
     def run(self):
-        print(f"Началось выполнение {self.num_thread} задачи")
+        print(f"Началось выполнение {self.num_thread} задачи\n")
         while self.active:
             if self.run_task:
                 if self.num_thread == WorkerThreadName.RECORD.value:

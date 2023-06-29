@@ -325,5 +325,6 @@ window.bind("<KeyPress>", keydown)
 window.bind("<KeyRelease>", keyup)
 
 window.mainloop()
+# http://ru.battleship-game.org/id89615982
 
 worker.active = False

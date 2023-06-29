@@ -5,7 +5,7 @@ SAMPLE_RATE = 44100
 # 16-ти битный звук (2 ** 16 -- максимальное значение для int16)
 S_16BIT = 2 ** 16
 
-AMOUNT_PIANOS = 2
+AMOUNT_PIANOS = 1
 
 OCT_NUMBERS = [3] * AMOUNT_PIANOS
 

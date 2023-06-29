@@ -29,6 +29,7 @@ pressed_keys = set()
 
 
 def keydown(event):
+    worker.btn_is_up = False
     global pressed_keys
     pressed_keys.add(event.keysym)
     for now_piano_num in range(0, AMOUNT_PIANOS):
@@ -44,6 +45,7 @@ def keydown(event):
 
 
 def keyup(event):
+    worker.btn_is_up = True
     global pressed_keys
     pressed_keys.discard(event.keysym)
     print(event.keysym)
@@ -107,6 +109,7 @@ def stop_record():
 
 
 def start_record():
+    worker.run_task = True
     print('Recording...')
     global frames
     frames = []
@@ -119,11 +122,13 @@ def record():
         btn_record.config(text="not rec")
         record_on = False
         now_playing_sound_and_recording = False
+        worker.is_recording_now = False
         stop_record()
     else:
         btn_record.config(text="recording")
         record_on = True
         now_playing_sound_and_recording = False
+        worker.is_recording_now = True
         start_record()
 
 
@@ -148,7 +153,10 @@ def play_note_by_key():
     maximum = 100000000
     for _key in pressed_keys:
         try:
-            piano_num = [i for i in range(0, AMOUNT_PIANOS) if _key in BIND_KEYS[i]][0]
+            if AMOUNT_PIANOS != 1:
+                piano_num = [i for i in range(0, AMOUNT_PIANOS) if _key in BIND_KEYS[i]][0]
+            else:
+                piano_num = 0
             print(piano_num)
             index = BIND_KEYS[piano_num].index(_key)
             maximum = min(maximum, max(GENERATORS[piano_num].tones[index]))
@@ -271,7 +279,7 @@ btn_metronome_switch = Button(window, text="Set", font=FONT, bg=SECOND_COLOR, fg
                               activeforeground="black", command=metronome_switch)
 btn_metronome_switch.place(relx=0.51, rely=0.9, relwidth=0.23, relheight=0.09)
 
-worker = Worker.Worker(1)
+worker = Worker.Worker(2)
 worker.start()
 worker.run_task = True
 
@@ -304,5 +312,5 @@ window.bind("<KeyRelease>", keyup)
 
 window.mainloop()
 # http://ru.battleship-game.org/id89615982
-#https://chordify.net/chords/super-mario-theme-easy-piano-piaknowitall
+# https://chordify.net/chords/super-mario-theme-easy-piano-piaknowitall
 worker.active = False

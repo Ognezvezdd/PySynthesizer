@@ -26,7 +26,6 @@ class Generator:
         # амплитуда
         amplitude = np.round(self.S_16BIT * volume / 4)
         # длительность генерируемого звука в сэмплах
-        total_samples = np.round(self.SAMPLE_RATE * duration)
         # частоте дискретизации (пересчитанная)
         w = 2.0 * np.pi * freq / self.SAMPLE_RATE
         # массив сэмплов

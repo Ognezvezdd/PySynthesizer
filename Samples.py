@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 
-# matplotlib.use('TkAgg')
+matplotlib.use('TkAgg')
 import guitar
 
 

@@ -167,13 +167,15 @@ def play_note_by_key():
     sound = np.array(sound, dtype=np.int32)
     maximum = 100000000
     for _key in pressed_keys:
-        piano_num = [i for i in range(0, AMOUNT_PIANOS) if _key in BIND_KEYS[i]][0]
-        print(piano_num)
         try:
+            piano_num = [i for i in range(0, AMOUNT_PIANOS) if _key in BIND_KEYS[i]][0]
+            print(piano_num)
             index = BIND_KEYS[piano_num].index(_key)
             maximum = min(maximum, max(GENERATORS[piano_num].tones[index]))
             sound = list(map(lambda x, y: x + y, sound, GENERATORS[piano_num].tones[index]))
-        except ValueError:
+        except EXCEPTION as ex:
+            pass
+        else:
             pass
 
     sound = sound / max(sound) * maximum
@@ -302,7 +304,7 @@ for piano in range(AMOUNT_PIANOS):
 
     GENERATORS.append(gen)
     GENERATORS[piano].generate_tones(DURATION_TONE)
-    GENERATORS[piano].USED_GRAPHS = True
+    GENERATORS[piano].USED_GRAPHS = False
 
 metronome = Metrognome.Metronome(root=window)
 

@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 
-import Worker
+# matplotlib.use('TkAgg')
 import guitar
 
 
@@ -20,11 +21,6 @@ class Generator:
         self.EFFECTS = EFFECTS
         self.USED_GRAPHS = USED_GRAPHS
         self.AMOUNT_OCT = AMOUNT_OCT
-        self.graph_list = []
-
-    def get_graph(self, worker: Worker.Worker):
-        worker.graph_list = self.graph_list
-        worker.run_task = True
 
     def generate_sample(self, freq, duration, volume):
         # амплитуда
@@ -70,11 +66,10 @@ class Generator:
             if i > 3:
                 continue
             if self.USED_GRAPHS:
-                self.graph_list.append(tone[0:1000])
+                plt.plot(tone[0:1000])
         if self.USED_GRAPHS:
             plt.show()
         self.tones = tones
-        # return tones
 
     def config_duration(self, string):
         if not string.replace('.', '').isdigit():

@@ -2,7 +2,6 @@ import os
 import time
 import wave
 from tkinter import *
-
 import numpy as np
 import pyaudio as pa
 from playsound import playsound
@@ -144,6 +143,7 @@ def play_note_by_btn(note, piano_num):
     STREAMS[piano].write(GENERATORS[piano_num].tones[NOTES.index(note)])
     print(note)
     if record_on:
+        frames.append(worker.update_frame())
         frames.append(GENERATORS[piano_num].tones[NOTES.index(note)])
 
 
@@ -169,8 +169,9 @@ def play_note_by_key():
     sound = sound / max(sound) * maximum
     STREAMS[0].write(np.array(sound, dtype=np.int16))
     if record_on:
+        frames.append(worker.update_frame())
         frames.append(np.array(sound, dtype=np.int16))
-        print(len(STREAMS[0].read(BUFFER)))
+        # print(len(STREAMS[0].read(BUFFER)))
 
 
 window = Tk()
@@ -307,8 +308,8 @@ for piano in range(AMOUNT_PIANOS):
                       channels=2, rate=SAMPLE_RATE, output=True, frames_per_buffer=BUFFER)
     STREAMS.append(s)
 
-#from Mario import mario
-#mario(GENERATORS)
+from Mario import mario
+mario(GENERATORS)
 
 
 window.bind("<KeyPress>", keydown)

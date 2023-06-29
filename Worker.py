@@ -3,6 +3,7 @@ import time
 import matplotlib.pyplot as plt
 from constants import SAMPLE_RATE
 from enum import Enum
+import numpy as np
 
 
 class WorkerThreadName(Enum):
@@ -22,10 +23,19 @@ class Worker(threading.Thread):
         self.active = True
         self.btn_is_up = True
 
+    def update_frame(self):
+        f = self.frames
+        self.frames = []
+        return np.array(f, dtype=np.int16)
+
     def record(self):
+
         if self.is_recording_now and self.btn_is_up:
-            print("nothing happens")
-            self.frames.insert([0]*SAMPLE_RATE/10)
+            # print("nothing happens")
+            temp = [0] * int(SAMPLE_RATE / 5)
+            # temp = [0]
+            self.frames.append(temp)
+            time.sleep(0.1)
 
     def run(self):
         print(f"Началось выполнение {self.num_thread} задачи\n")

@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
+import guitar
 
 matplotlib.use('TkAgg')
-import guitar
 
 
 class Generator:

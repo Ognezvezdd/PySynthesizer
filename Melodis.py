@@ -1,3 +1,19 @@
+def repl(string: str):
+    x = string.split()
+    x = list(map(int, x))
+    if len(x) > 2:
+        ans = []
+        d = []
+        for i in x:
+            d.append(i)
+            if len(d) >= 2:
+                ans.append(d)
+                d = []
+        return ans
+    else:
+        return [x]
+
+
 class Melodis:
     """ piano 0 = first
         piano 1 = greate \n
@@ -324,6 +340,19 @@ class Melodis:
         [[1, 19]],
         [[1, 19]],
     ]
+    new_list = []
+    with open('new_melody.txt', "r") as f:
+        text = f.read()
+    new_list = [text.split('\n')][0]
+    while '' in new_list:
+        new_list.remove('')
+    # print(new_list)
+    new_list = list(map(repl, new_list))
+    # print(new_list)
 
-    def __init__self(self):
-        pass
+    def __init__(self):
+        self.lists = [Melodis.mario_list, Melodis.new_list]
+        self.this_list = Melodis.mario_list
+
+    def change_song(self):
+        self.this_list = self.lists[(self.lists.index(self.this_list) + 1) % 2]

@@ -16,13 +16,17 @@ from constants import *
 pressed_keys = set()
 is_stop_please = False
 
+melody = Melodis.Melodis()
+
 
 async def play_sound_mario():
     global is_stop_please
 
     event = tkinter.Event
     event.keysym = 'q'
-    for i in Melodis.Melodis.mario_list:
+    global melody
+    print(melody.this_list)
+    for i in melody.this_list:
         if is_stop_please:
             return
         if i[0] == -1:
@@ -58,6 +62,7 @@ def close_window(new_melody_entry, new_melody_window):
 
 def keydown(event):
     """" """
+
     global is_stop_please
     if 'F1' == event.keysym:
         is_stop_please = False
@@ -86,7 +91,12 @@ def keydown(event):
             gen_change(1)
             gen_change(1)
         return
-
+    if "F5" == event.keysym:
+        global melody
+        melody.change_song()
+        print("NOW MELODY")
+        print(melody.this_list)
+        return
     if 'F12' == event.keysym:
         new_melody_window = tkinter.Toplevel(window)
         new_melody_window.geometry("1000x100")

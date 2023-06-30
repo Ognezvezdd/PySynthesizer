@@ -15,7 +15,7 @@ def repl(string: str):
 
 
 class Melodis:
-    """ piano 0 = first
+    """ Piano 0 = first
         piano 1 = greate \n
 
         ПРИМЕР
@@ -382,10 +382,12 @@ class Melodis:
         new_list.remove('')
     new_list = list(map(repl, new_list))
 
-
     def __init__(self):
+        self.variants = ["Mario", "Rammstein", "Custom"]
+        self.variants_now = 0
         self.lists = [Melodis.mario_list, Melodis.rammstein_list, Melodis.new_list]
         self.this_list = Melodis.mario_list
 
     def change_song(self):
         self.this_list = self.lists[(self.lists.index(self.this_list) + 1) % len(self.lists)]
+        self.variants_now = (self.variants_now + 1) % len(self.variants)

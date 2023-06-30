@@ -10,13 +10,13 @@ py_audio = pa.PyAudio()
 
 GENERATORS = []
 
-gen = Samples.Generator(DURATION_TONE, 0.8, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, "saw", EFFECTS,
+gen = Samples.Generator(0.8, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, "saw", EFFECTS,
                         3, AMOUNT_OCT, False)
 GENERATORS.append(gen)
 GENERATORS[0].generate_tones()
 GENERATORS[0].USED_GRAPHS = False
 
-gen = Samples.Generator(DURATION_TONE, 0.8, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, "saw", EFFECTS,
+gen = Samples.Generator(0.8, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, "saw", EFFECTS,
                         1, AMOUNT_OCT, False)
 GENERATORS.append(gen)
 GENERATORS[1].generate_tones()

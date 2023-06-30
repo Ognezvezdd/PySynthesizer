@@ -347,7 +347,7 @@ worker.run_task = True
 
 GENERATORS = []
 for piano in range(AMOUNT_PIANOS):
-    gen = Samples.Generator(DURATION_TONE, DURATION, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0],
+    gen = Samples.Generator(DURATION, S_16BIT, SAMPLE_RATE, GENERATIONS_TYPES, GENERATION_TYPES[0],
                             EFFECTS,
                             OCT_NUMBERS[0], AMOUNT_OCT, False)
 

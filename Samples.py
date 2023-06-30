@@ -8,10 +8,9 @@ matplotlib.use('TkAgg')
 
 class Generator:
 
-    def __init__(self, DURATION_TONE: float, duration: int, S_16BIT: int, SAMPLE_RATE: int, GENERATION_TYPES: list,
+    def __init__(self, duration: int, S_16BIT: int, SAMPLE_RATE: int, GENERATION_TYPES: list,
                  GENERATION_TYPE: str, EFFECTS: dict,
                  OCT_NUMBER: int, AMOUNT_OCT: int, USED_GRAPHS: bool = False):
-        self.DURATION_TONE = DURATION_TONE
         self.tones = []
         self.OCT_NUMBER = OCT_NUMBER
         self.duration = duration

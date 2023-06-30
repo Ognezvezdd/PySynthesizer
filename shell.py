@@ -14,7 +14,6 @@ import Melodis
 from constants import *
 
 pressed_keys = set()
-
 is_stop_please = False
 
 

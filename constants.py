@@ -22,15 +22,23 @@ OCTAVES = ["contr", "greate", "small", "first", "second", "third", "fourth"]
 GENERATION_TYPES = ["sinus"] * AMOUNT_PIANOS
 """ Тип генерации для каждой из клавиатур """
 GENERATIONS_TYPES = ["sinus", "saw", 'guitar']
+""" Типы генерации """
 EFFECTS = {'distortion': 1}
+""" Эффекты (distortion = 1 - это отсутствие distortion) """
 
 BIND_KEYS = [["q", "2", "w", "3", "e", "r", "7", "u", "8", "i", "9", "o", "p"],
              ["z", "s", "x", "d", "c", "v", "j", "m", "k", "comma", "l", "period", "slash"]]
+""" Клавиши для игры """
 AMOUNT_OCT = 2
+""" Количество октав на экране """
 WHITE_NOTES = AMOUNT_OCT * 7 + 1
+""" Количество клавиш для работы внутри программы (не рекомендую менять) """
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
+""" Ноты для игры """
 oct_num = 1
 
+
+""" ЦВЕТА И ОФОРМЛЕНИЕ """
 FONT = "Arial 16"
 FIRST_COLOR = "#666666"
 SECOND_COLOR = "#BB0000"

@@ -36,7 +36,7 @@ async def play_sound_mario():
             play_note_by_btn(NOTES[j[1]], j[0])
         window.update()
 
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.25 * DURATION)
         for j in i:
             if len(btns[j[0]][j[1]].cget('text')) >= 2 and btns[j[0]][j[1]].cget('text')[1] == "b":
                 btns[j[0]][j[1]].config(bg="black", relief="raised")
@@ -101,6 +101,7 @@ def keydown(event):
                 btns[now_piano_num][index].config(bg="#DDDDDD", relief="sunken")
         except ValueError:
             pass
+    window.update()
     play_note_by_key()
 
 

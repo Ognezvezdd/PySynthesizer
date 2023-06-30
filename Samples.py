@@ -1,3 +1,5 @@
+""" КЛАСС ДЛЯ ГЕРЕНАЦИИ ЗВУКОВ"""
+
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
@@ -20,6 +22,8 @@ class Generator:
         self.GENERATION_TYPE = GENERATION_TYPE
         self.EFFECTS = EFFECTS
         self.USED_GRAPHS = USED_GRAPHS
+        """" ИСПОЛЬЗОВАТЬ ГРАФИКИ ИЛИ НЕТ
+             НЕ РЕКОМЕНДУЕТСЯ ИСПОЛЬЗОВАТЬ, ТК ГРАФИКИ ЛОМАЮТ STREAM"""
         self.AMOUNT_OCT = AMOUNT_OCT
 
     def generate_sample(self, freq):

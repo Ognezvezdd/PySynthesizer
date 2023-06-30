@@ -6,6 +6,8 @@ import wave
 from tkinter import *
 import numpy as np
 import pyaudio as pa
+import atexit
+
 from playsound import playsound
 import Metrognome
 import Samples
@@ -50,6 +52,12 @@ async def start_sins():
     await task1
 
 
+def close_window(new_melody_entry, new_melody_window):
+    print(new_melody_entry.get())
+    new_melody_window.destroy()
+    return
+
+
 def keydown(event):
     """" """
     global is_stop_please
@@ -86,6 +94,7 @@ def keydown(event):
         new_melody_window.geometry("1000x100")
         new_melody_entry = Entry(new_melody_window)
         new_melody_entry.place(relwidth=1, relheight=1)
+        new_melody_window.protocol('WM_DELETE_WINDOW', lambda arg1=new_melody_entry, arg2=new_melody_window: close_window(arg1, arg2))
         return
 
     worker.btn_is_up = False

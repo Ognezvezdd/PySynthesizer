@@ -340,6 +340,40 @@ class Melodis:
         [[1, 19]],
         [[1, 19]],
     ]
+
+    rammstein_list = [
+        [[0, 29]],
+        [[0, 31]],
+        [[0, 19]],
+        [[0, 7]],
+        [[0, 14]],
+        [[0, 19]],
+        [[0, 12]],
+        [[0, 33]],
+        [[0, 34]],
+        [[0, 22]],
+        [[0, 10]],
+        [[0, 17]],
+        [[0, 22]],
+        [[0, 17]],
+        [[1, 2]],
+        [[0, 21]],
+        [[0, 26]],
+        [[0, 21]],
+        [[0, 33]],
+        [[0, 16]],
+        [[0, 21]],
+        [[0, 16]],
+        [[0, 34]],
+        [[0, 33]],
+        [[0, 31]],
+        [[0, 29]],
+        [[0, 31]],
+        [[0, 14]],
+        [[0, 19]],
+        [[0, 14]],
+    ]
+
     new_list = []
     with open('new_melody.txt', "r") as f:
         text = f.read()
@@ -348,11 +382,12 @@ class Melodis:
         new_list.remove('')
     # print(new_list)
     new_list = list(map(repl, new_list))
+
     # print(new_list)
 
     def __init__(self):
-        self.lists = [Melodis.mario_list, Melodis.new_list]
+        self.lists = [Melodis.mario_list, Melodis.rammstein_list, Melodis.new_list]
         self.this_list = Melodis.mario_list
 
     def change_song(self):
-        self.this_list = self.lists[(self.lists.index(self.this_list) + 1) % 2]
+        self.this_list = self.lists[(self.lists.index(self.this_list) + 1) % len(self.lists)]

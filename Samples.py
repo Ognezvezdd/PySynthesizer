@@ -10,7 +10,7 @@ matplotlib.use('TkAgg')
 
 class Generator:
 
-    def __init__(self, duration: int, S_16BIT: int, SAMPLE_RATE: int, GENERATION_TYPES: list,
+    def __init__(self, duration: float, S_16BIT: int, SAMPLE_RATE: int, GENERATION_TYPES: list,
                  GENERATION_TYPE: str, EFFECTS: dict,
                  OCT_NUMBER: int, AMOUNT_OCT: int, USED_GRAPHS: bool = False):
         self.tones = []

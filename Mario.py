@@ -56,14 +56,14 @@ def mario():
     accord([[0, 10], [1, 5]])
     accord([[0, 9], [1, 5]])
 
-    print(frames)
-    print('Finished recording!')
+    # print(frames)
+    # print('Finished recording!')
     current_time = str(time.strftime("%H-%M-%S", time.localtime()))
     filename = "Records/" + "record " + current_time + ".wav"
     file_path = f'Records/{filename}'
     if os.path.exists(file_path):
         filename = filename[:-5] + "1" + ".wav"
-    print(filename)
+    # print(filename)
     wf = wave.open(filename, 'wb')
     channels = 2
     wf.setnchannels(channels)

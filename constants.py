@@ -43,7 +43,7 @@ try:
             NOTES.append(NOTES[j] + str(oct_num))
         oct_num += 1
 except Exception as es:
-    print(es)
+    pass
 NOTES.append(NOTES[0] + str(oct_num))
 
 """ ЦВЕТА И ОФОРМЛЕНИЕ """

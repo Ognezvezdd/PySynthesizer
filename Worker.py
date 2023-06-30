@@ -41,7 +41,7 @@ class Worker(threading.Thread):
             time.sleep(0.1)
 
     def run(self):
-        print(f"Началось выполнение {self.num_thread} задачи\n")
+        # print(f"Началось выполнение {self.num_thread} задачи\n")
         while self.active:
             if self.run_task:
                 while self.is_recording_now:

@@ -59,7 +59,7 @@ class Generator:
         plt.close()
         tones = []
         i = 0
-        print([self.generate_notes(n) for n in range(1, (self.AMOUNT_OCT * 12 + 2), 1)])
+        # print([self.generate_notes(n) for n in range(1, (self.AMOUNT_OCT * 12 + 2), 1)])
         freq_array = np.array([self.generate_notes(n) for n in range(1, (self.AMOUNT_OCT * 12 + 2))])
         for freq in freq_array:
             i += 1
@@ -88,5 +88,5 @@ class Generator:
         if self.EFFECTS['distortion'] == num:
             return
         self.EFFECTS['distortion'] = num
-        print(f"distortion: {self.EFFECTS['distortion']}")
+        # print(f"distortion: {self.EFFECTS['distortion']}")
         self.generate_tones()

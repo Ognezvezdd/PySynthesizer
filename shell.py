@@ -25,7 +25,7 @@ async def play_sound_mario():
     event = tkinter.Event
     event.keysym = 'q'
     global melody
-    print(melody.this_list)
+    # print(melody.this_list)
     for i in melody.this_list:
         if is_stop_please:
             return
@@ -55,7 +55,7 @@ async def start_sins():
 
 
 def close_window(new_melody_entry, new_melody_window):
-    print(new_melody_entry.get())
+    # print(new_melody_entry.get())
     new_melody_window.destroy()
     return
 
@@ -94,8 +94,8 @@ def keydown(event):
     if "F5" == event.keysym:
         global melody
         melody.change_song()
-        print("NOW MELODY")
-        print(melody.this_list)
+        # print("NOW MELODY")
+        # print(melody.this_list)
         return
     if 'F12' == event.keysym:
         new_melody_window = tkinter.Toplevel(window)
@@ -109,7 +109,7 @@ def keydown(event):
     worker.btn_is_up = False
     global pressed_keys
     pressed_keys.add(event.keysym)
-    print(event.keysym)
+    # print(event.keysym)
     for now_piano_num in range(0, AMOUNT_PIANOS):
         try:
             index = BIND_KEYS[now_piano_num].index(event.keysym)
@@ -169,14 +169,14 @@ frames = []
 
 
 def stop_record():
-    print(frames)
-    print('Finished recording!')
+    # print(frames)
+    # print('Finished recording!')
     current_time = str(time.strftime("%H-%M-%S", time.localtime()))
     filename = "Records/" + "record " + current_time + ".wav"
     file_path = f'Records/{filename}'
     if os.path.exists(file_path):
         filename = filename[:-5] + "1" + ".wav"
-    print(filename)
+    # print(filename)
     wf = wave.open(filename, 'wb')
     channels = 2
     wf.setnchannels(channels)
@@ -188,7 +188,7 @@ def stop_record():
 
 def start_record():
     worker.run_task = True
-    print('Recording...')
+    # print('Recording...')
     global frames
     frames = []
 
@@ -214,13 +214,13 @@ def record_play():
     directory = 'Records'
     last = max([os.path.join(directory, filename) for filename in os.listdir(directory)], key=os.path.getctime)
     last = last.replace('\\', '/')
-    print(f"I play: {last}")
+    # print(f"I play: {last}")
     playsound(os.path.abspath(last), block=True)
 
 
 def play_note_by_btn(note, piano_num):
     STREAMS[piano_num].write(GENERATORS[piano_num].tones[NOTES.index(note)])
-    print(note)
+    # print(note)
     if record_on:
         frames.append(GENERATORS[piano_num].tones[NOTES.index(note)])
 

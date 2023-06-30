@@ -380,10 +380,8 @@ class Melodis:
     new_list = [text.split('\n')][0]
     while '' in new_list:
         new_list.remove('')
-    # print(new_list)
     new_list = list(map(repl, new_list))
 
-    # print(new_list)
 
     def __init__(self):
         self.lists = [Melodis.mario_list, Melodis.rammstein_list, Melodis.new_list]

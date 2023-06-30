@@ -5,12 +5,13 @@ SAMPLE_RATE = 44100
 # 16-ти битный звук (2 ** 16 -- максимальное значение для int16)
 S_16BIT = 2 ** 16
 
-DURATION = 1
+
+
+DURATION = 0.8
 
 AMOUNT_PIANOS = 2
 
 OCT_NUMBERS = [3] * AMOUNT_PIANOS
-
 OCTAVES = ["contr", "greate", "small", "first", "second", "third", "fourth"]
 
 GENERATION_TYPES = ["sinus"] * AMOUNT_PIANOS

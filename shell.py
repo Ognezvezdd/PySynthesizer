@@ -1,3 +1,4 @@
+import asyncio
 import os
 import time
 import tkinter
@@ -22,23 +23,74 @@ NOTES.append(NOTES[0] + str(oct_num + 1))
 
 pressed_keys = set()
 
-
-def play_sound_mario():
-    def play():
-        event = tkinter.Event
-        event.keysym = 'q'
-        for i in Melodis.Melodis.mario_list:
-            pass
-        keydown(event)
-        keyup(event)
-
-    play()
+is_stop_please = False
 
 
-def keydown(event, is_used=True):
+async def play_sound_mario():
+    global is_stop_please
+
+
+    event = tkinter.Event
+    event.keysym = 'q'
+    for i in Melodis.Melodis.mario_list:
+        if is_stop_please:
+            return
+        if i[0] == -1:
+            await asyncio.sleep(0.08)
+            continue
+        for j in i:
+            if len(btns[j[0]][j[1]].cget('text')) >= 2 and btns[j[0]][j[1]].cget('text')[1] == "b":
+                btns[j[0]][j[1]].config(bg="#444444", relief="sunken")
+            else:
+                btns[j[0]][j[1]].config(bg="#DDDDDD", relief="sunken")
+            play_note_by_btn(NOTES[j[1]], j[0])
+        window.update()
+
+        await asyncio.sleep(0.2)
+        for j in i:
+            if len(btns[j[0]][j[1]].cget('text')) >= 2 and btns[j[0]][j[1]].cget('text')[1] == "b":
+                btns[j[0]][j[1]].config(bg="black", relief="raised")
+            else:
+                btns[j[0]][j[1]].config(bg="white", relief="raised")
+        window.update()
+
+
+async def start_sins():
+    task1 = asyncio.create_task(play_sound_mario())
+    await task1
+
+
+def keydown(event):
+    """" """
+    global is_stop_please
     if 'F1' == event.keysym:
-        play_sound_mario()
+        is_stop_please = False
+        asyncio.run(start_sins())
         return
+    if 'F2' == event.keysym:
+        is_stop_please = True
+        return
+
+    if 'F3' == event.keysym:
+        if (1 - OCT_NUMBERS[1]) != 0:
+            oct_change(1 - OCT_NUMBERS[1], 1)
+        if GENERATION_TYPES[0] == "saw":
+            pass
+        elif GENERATION_TYPES[0] == "sinus":
+            gen_change(0)
+        else:
+            gen_change(0)
+            gen_change(0)
+
+        if GENERATION_TYPES[1] == "saw":
+            pass
+        elif GENERATION_TYPES[1] == "sinus":
+            gen_change(1)
+        else:
+            gen_change(1)
+            gen_change(1)
+        return
+
     worker.btn_is_up = False
     global pressed_keys
     pressed_keys.add(event.keysym)
@@ -52,8 +104,7 @@ def keydown(event, is_used=True):
                 btns[now_piano_num][index].config(bg="#DDDDDD", relief="sunken")
         except ValueError:
             pass
-    if is_used:
-        play_note_by_key()
+    play_note_by_key()
 
 
 def keyup(event):
@@ -152,7 +203,7 @@ def record_play():
 
 
 def play_note_by_btn(note, piano_num):
-    STREAMS[piano].write(GENERATORS[piano_num].tones[NOTES.index(note)])
+    STREAMS[piano_num].write(GENERATORS[piano_num].tones[NOTES.index(note)])
     print(note)
     if record_on:
         frames.append(GENERATORS[piano_num].tones[NOTES.index(note)])

@@ -30,6 +30,14 @@ AMOUNT_OCT = 2
 WHITE_NOTES = AMOUNT_OCT * 7 + 1
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
 oct_num = 1
+try:
+    for piano_num in range(1, AMOUNT_OCT):
+        for j in range(0, 12):
+            NOTES.append(NOTES[j] + str(oct_num))
+        oct_num += 1
+except Exception as es:
+    print(es)
+NOTES.append(NOTES[0] + str(oct_num))
 
 FONT = "Arial 16"
 FIRST_COLOR = "#666666"

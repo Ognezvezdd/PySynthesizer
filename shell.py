@@ -13,14 +13,6 @@ import Worker
 import Melodis
 from constants import *
 
-try:
-    for piano_num in range(1, AMOUNT_OCT):
-        for j in range(0, 12):
-            NOTES.append(NOTES[j] + str(oct_num))
-except EXCEPTION as es:
-    print(es)
-NOTES.append(NOTES[0] + str(oct_num + 1))
-
 pressed_keys = set()
 
 is_stop_please = False
@@ -28,7 +20,6 @@ is_stop_please = False
 
 async def play_sound_mario():
     global is_stop_please
-
 
     event = tkinter.Event
     event.keysym = 'q'
@@ -89,6 +80,13 @@ def keydown(event):
         else:
             gen_change(1)
             gen_change(1)
+        return
+
+    if 'F12' == event.keysym:
+        new_melody_window = tkinter.Toplevel(window)
+        new_melody_window.geometry("1000x100")
+        new_melody_entry = Entry(new_melody_window)
+        new_melody_entry.place(relwidth=1, relheight=1)
         return
 
     worker.btn_is_up = False

@@ -36,7 +36,7 @@ async def play_sound_mario():
             play_note_by_btn(NOTES[j[1]], j[0])
         window.update()
 
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.25 * DURATION)
         for j in i:
             if len(btns[j[0]][j[1]].cget('text')) >= 2 and btns[j[0]][j[1]].cget('text')[1] == "b":
                 btns[j[0]][j[1]].config(bg="black", relief="raised")
@@ -48,6 +48,12 @@ async def play_sound_mario():
 async def start_sins():
     task1 = asyncio.create_task(play_sound_mario())
     await task1
+
+
+def close_window(new_melody_entry, new_melody_window):
+    print(new_melody_entry.get())
+    new_melody_window.destroy()
+    return
 
 
 def keydown(event):
@@ -86,6 +92,8 @@ def keydown(event):
         new_melody_window.geometry("1000x100")
         new_melody_entry = Entry(new_melody_window)
         new_melody_entry.place(relwidth=1, relheight=1)
+        new_melody_window.protocol('WM_DELETE_WINDOW',
+                                   lambda arg1=new_melody_entry, arg2=new_melody_window: close_window(arg1, arg2))
         return
 
     worker.btn_is_up = False
@@ -101,6 +109,7 @@ def keydown(event):
                 btns[now_piano_num][index].config(bg="#DDDDDD", relief="sunken")
         except ValueError:
             pass
+    window.update()
     play_note_by_key()
 
 

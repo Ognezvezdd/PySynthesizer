@@ -22,7 +22,7 @@ async def play_sound_mario():
 
     event = tkinter.Event
     event.keysym = 'q'
-    for i in Melodis.Melodis.mario_list:
+    for i in Melodis.Melodis.rammstein_list:
         if is_stop_please:
             return
         if i[0] == -1:

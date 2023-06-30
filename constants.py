@@ -35,8 +35,16 @@ WHITE_NOTES = AMOUNT_OCT * 7 + 1
 """ Количество клавиш для работы внутри программы (не рекомендую менять) """
 NOTES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Hb", "H"]
 """ Ноты для игры """
-oct_num = 1
 
+oct_num = 1
+try:
+    for piano_num in range(1, AMOUNT_OCT):
+        for j in range(0, 12):
+            NOTES.append(NOTES[j] + str(oct_num))
+        oct_num += 1
+except Exception as es:
+    print(es)
+NOTES.append(NOTES[0] + str(oct_num))
 
 """ ЦВЕТА И ОФОРМЛЕНИЕ """
 FONT = "Arial 16"

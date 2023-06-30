@@ -13,22 +13,12 @@ import Worker
 import Melodis
 from constants import *
 
-try:
-    for piano_num in range(1, AMOUNT_OCT):
-        for j in range(0, 12):
-            NOTES.append(NOTES[j] + str(oct_num))
-except EXCEPTION as es:
-    print(es)
-NOTES.append(NOTES[0] + str(oct_num + 1))
-
 pressed_keys = set()
-
 is_stop_please = False
 
 
 async def play_sound_mario():
     global is_stop_please
-
 
     event = tkinter.Event
     event.keysym = 'q'
